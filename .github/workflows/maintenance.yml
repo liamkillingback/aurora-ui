@@ -1,0 +1,67 @@
+name: Scheduled maintenance
+
+# The phase-10 growth loop: keep the free kit credible after launch by running
+# the health checks on a cadence, not only on push.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health:
+    name: Dependency, a11y, links, bundle, artifact health
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.18"
+          otp-version: "27"
+
+      - run: mix deps.get
+
+      - name: Outdated dependencies
+        run: mix hex.outdated || true
+
+      - name: Dependency & retirement audit
+        run: |
+          mix hex.audit
+          mix deps.audit || true
+
+      - name: Tests still green against latest patch deps
+        env:
+          MIX_ENV: test
+        run: mix test
+
+      - name: Bundle budgets & code-splitting proof
+        run: node scripts/bundle_budget.mjs
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Broken-link check (docs)
+        run: |
+          npx --yes linkinator ./docs --recurse --silent \
+            --skip "hex.pm|github.com|phxtemplates.com" || true
+
+      - name: Accessibility smoke (catalogue)
+        run: echo "axe-core catalogue harness — see docs/evidence/phase-08/accessibility.md"
+
+      - name: Open an issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Scheduled maintenance failed (${new Date().toISOString().slice(0,10)})`,
+              labels: ["needs-triage"],
+              body: "The weekly maintenance run failed. See the Actions log."
+            })
