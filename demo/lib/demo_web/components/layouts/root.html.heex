@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-aui-root data-aui-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title default="Aurora UI" suffix=" · Aurora UI">{assigns[:page_title]}</.live_title>
+    <meta
+      name="description"
+      content={
+        assigns[:page_description] ||
+          "Aurora UI — a free, MIT-licensed Phoenix LiveView + Tailwind component kit. 15 accessible, themeable families."
+      }
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aurora UI" />
+    <meta property="og:title" content={assigns[:page_title] || "Aurora UI"} />
+    <meta
+      property="og:description"
+      content={
+        assigns[:page_description] ||
+          "A free, MIT-licensed Phoenix LiveView + Tailwind component kit."
+      }
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+    </script>
+    <script>
+      // Apply the persisted Aurora theme + motion preference before first paint
+      // to avoid a flash. The <html> default above is dark; a stored choice wins.
+      (() => {
+        const root = document.documentElement;
+        const theme = localStorage.getItem("aui-theme");
+        // Default (no stored choice) is the dark attribute already on <html>.
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-aui-theme", theme);
+        } else if (theme === "system") {
+          // Follow the OS: drop the attribute so the token stylesheet decides.
+          root.removeAttribute("data-aui-theme");
+        }
+        if (localStorage.getItem("aui-motion") === "reduce") {
+          root.setAttribute("data-motion", "reduce");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    {@inner_content}
+  </body>
+</html>
