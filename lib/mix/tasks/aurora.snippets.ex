@@ -21,6 +21,11 @@ defmodule Mix.Tasks.Aurora.Snippets do
   @impl Mix.Task
   def run(_args) do
     Mix.Task.run("compile")
+    # Ensure the library's modules are loadable before we compile snippets that
+    # import them, so a cold/parallel build can't race the dependency load order.
+    Mix.Task.run("loadpaths")
+    Application.ensure_all_started(:aurora_ui)
+    Code.ensure_compiled!(AuroraUI.Internal)
 
     case snippet_files() do
       [] ->
