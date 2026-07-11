@@ -32,17 +32,20 @@ defmodule AuroraUI.Components.Selection do
   reflecting the active option into `aria-activedescendant` on the input. It
   respects `prefers-reduced-motion` and cleans up on `destroyed()`.
 
-  **Filtering and selection stay server-driven.** Wire `phx-change` on the input
-  to filter `options` on the server. When the user commits or clears a value, the
-  hook dispatches bubbling `CustomEvent`s you can hook LiveView `JS`/`phx-*` to:
+  **Filtering and selection stay server-driven.** The `AuroraCombobox` hook
+  pushes LiveView **server events** (`pushEventTo` on the component root) that you
+  handle in `handle_event/3`:
 
-    * `aui:combobox:select` — `detail: %{value, id}` when an option is committed
-    * `aui:combobox:open` / `aui:combobox:close` — expansion changes
-    * `aui:combobox:clear` — the clear button was pressed
+    * `"aui:combobox:filter"` — `%{"id" => id, "query" => query}` (input changed)
+    * `"aui:combobox:select"` — `%{"id" => id, "value" => value, "label" => label}`
+    * `"aui:combobox:open"` / `"aui:combobox:close"` — `%{"id" => id}`
+    * `"aui:combobox:clear"` — `%{"id" => id}`
 
-  Options come from the `options` attribute (convenience) or one or more
-  `<:option>` slots (custom markup); when both are empty and `loading` is false a
-  no-results row is shown.
+  By default the hook filters client-side; add `data-aui-remote` to defer
+  filtering to the server (it then pushes only `…:filter` and re-reads options
+  after the patch). Options come from the `options` attribute (convenience) or one
+  or more `<:option>` slots (custom markup); when both are empty and `loading` is
+  false a no-results row is shown.
   """
   use Phoenix.Component
 
