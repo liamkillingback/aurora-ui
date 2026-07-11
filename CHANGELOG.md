@@ -11,6 +11,49 @@ and the registered JavaScript hook names/DOM contract. Internal modules
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-07-11
+
+A second visual/interaction QA pass of the component lab. All are backward
+compatible (the public component API, `--aui-*` contract, and hook names are
+unchanged; only internal styling and one internal hook data-attribute moved).
+
+### Fixed
+
+- **Field controls show a single focus ring.** The bordered `field` control now
+  owns the ring on `:focus-within` (and the inner input's own outline is
+  suppressed). Previously the input drew its base outline inset inside the padded
+  box, so a focused input/textarea rendered two concentric rings.
+- **Horizontal `steps` no longer strike through their labels.** The connector
+  ran at the marker's vertical centre, straight across the inline label. The
+  horizontal stepper now stacks the marker over a centred label, with the
+  connector running between markers only. (Vertical steps are unchanged.)
+- **`icon_button` at the default `md` size is square.** It was `40×44` because
+  the width used `--aui-control-md` while the shared `md` `min-height` is the
+  44px touch target; the width now matches at 44px.
+- **`toast` exit animation plays.** The CSS matched `[data-aui-leaving="true"]`
+  but the hook sets the attribute with an empty value; it now matches on
+  presence, so dismissed/expired toasts animate out (and fade out under reduced
+  motion) instead of popping.
+- **Code-block copy button reads “Copied”.** The success state appended `"ied"`
+  to the `Copy` label, producing “Copyied”; it now swaps the whole word.
+- **Interactive `card` shows a visible focus ring.** The stretched link's outline
+  was painted outside the card's padding box and clipped by the card's
+  `overflow: hidden`. The ring now renders on the card itself (its own outline is
+  not clipped) and the link's clipped outline is suppressed.
+- **Command-palette backdrop dims in both themes.** The scrim was keyed to
+  `--aui-text`, which inverted to a near-white veil in dark mode; it now uses the
+  same fixed dark scrim as the dialog/drawer backdrops.
+- **`tilt` works again.** The CSS read `--aui-rx/--aui-ry` under a
+  `[data-aui-tilt-active]` state and the markup emitted `data-aui-max-deg`, but
+  the hook publishes `--aui-tilt-x/-y/-scale` and reads `data-aui-tilt-max`. The
+  stylesheet and markup now match the hook contract.
+- **Top/bottom `drawer` content scrolls inside.** The box was capped only on the
+  dialog, not the box, so tall content spilled past the 85dvh band; the box now
+  carries `max-block-size: 85dvh` and its body scrolls.
+- **Combobox query text stays clear of the loading spinner.** While `loading`,
+  the input reserves extra trailing space so a long query can't render beneath
+  the spinner that sits inboard of the clear button.
+
 ## [0.1.1] — 2026-07-11
 
 Interaction and layout fixes found in a full visual/interaction QA pass of the
@@ -71,6 +114,7 @@ Initial public release.
   support/compatibility policy, third-party notices, and architecture decision
   records.
 
-[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/liamkillingback/aurora-ui/releases/tag/v0.1.0

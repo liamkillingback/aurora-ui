@@ -55,7 +55,9 @@
 .aui-btn--md { height: var(--aui-control-md); min-height: var(--aui-touch-min); padding-inline: var(--aui-space-4); font-size: var(--aui-text-sm); }
 .aui-btn--lg { height: var(--aui-control-lg); padding-inline: var(--aui-space-6); font-size: var(--aui-text-base); }
 .aui-btn--icon { padding-inline: 0; aspect-ratio: 1; }
-.aui-btn--icon.aui-btn--md { width: var(--aui-control-md); }
+/* md keeps the 44px touch target square — the base .aui-btn--md min-height is
+   44px, so the width must match or the icon button renders 40×44 (oblong). */
+.aui-btn--icon.aui-btn--md { width: var(--aui-touch-min); }
 .aui-btn--icon.aui-btn--sm { width: var(--aui-control-sm); }
 .aui-btn--icon.aui-btn--lg { width: var(--aui-control-lg); }
 .aui-btn--block { width: 100%; }

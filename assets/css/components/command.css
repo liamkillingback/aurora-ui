@@ -185,7 +185,9 @@ a.aui-search-result__link:hover,
 .aui-command__backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(var(--aui-text) / 0.45);
+  /* Fixed dark scrim to match the dialog/drawer backdrops. Keying this to
+     --aui-text inverted in dark mode into a near-white veil over the page. */
+  background: rgb(2 6 16 / 0.55);
 }
 
 .aui-command__panel {

@@ -410,13 +410,23 @@
   flex: 1;
   position: relative;
 }
-/* Connector line between markers. */
+/* Horizontal: stack the marker over a centred body so the connector runs
+   between markers and never strikes through the label text. */
+.aui-steps--horizontal .aui-steps__item {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--aui-space-2);
+}
+/* Connector line between markers. It starts at this marker's centre and spans
+   one item + gap to reach the next marker's centre; the opaque, z-indexed
+   markers cover the ends so only the segment between markers shows. */
 .aui-steps--horizontal .aui-steps__item:not(:last-child)::after {
   content: "";
   position: absolute;
-  inset-block-start: calc(var(--aui-control-sm) / 2);
-  inset-inline-start: calc(var(--aui-control-sm) + var(--aui-space-2));
-  inline-size: calc(100% - var(--aui-control-sm));
+  inset-block-start: calc(var(--aui-control-sm) / 2 - 1px);
+  inset-inline-start: 50%;
+  inline-size: calc(100% + var(--aui-space-4));
   block-size: 2px;
   background: rgb(var(--aui-border-strong));
 }
@@ -469,6 +479,12 @@
   flex-direction: column;
   gap: var(--aui-space-1);
   padding-block-start: calc((var(--aui-control-sm) - 1.2em) / 2);
+}
+/* Horizontal stacks the body beneath the marker, so drop the row-centring
+   top padding and centre the text column. */
+.aui-steps--horizontal .aui-steps__body {
+  padding-block-start: 0;
+  align-items: center;
 }
 .aui-steps__label {
   font-weight: 600;

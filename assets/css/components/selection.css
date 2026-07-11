@@ -100,6 +100,11 @@
   border-radius: var(--aui-radius-md);
   transition: border-color var(--aui-dur-1) var(--aui-ease-standard);
 }
+/* While loading, the spinner sits inboard of the clear button; widen the text
+   inset so a long query can't render underneath the spinner. */
+.aui-combobox__input[aria-busy="true"] {
+  padding-inline-end: calc(var(--aui-space-10) + var(--aui-space-4));
+}
 .aui-combobox__input:hover:not(:disabled) {
   border-color: rgb(var(--aui-action));
 }

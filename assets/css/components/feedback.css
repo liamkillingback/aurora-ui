@@ -144,8 +144,9 @@
   --_accent: var(--aui-border-strong);
 }
 
-/* The hook flips this attribute when a timer expires or dismiss is pressed. */
-.aui-toast[data-aui-leaving="true"] {
+/* The hook sets this attribute (present, empty value) when a timer expires or
+   dismiss is pressed — match on presence, not a "true" value. */
+.aui-toast[data-aui-leaving] {
   animation: aui-toast-out var(--aui-dur-2) var(--aui-ease-exit) forwards;
 }
 
@@ -204,7 +205,7 @@
   .aui-toast {
     animation: aui-toast-fade var(--aui-dur-1) var(--aui-ease-standard);
   }
-  .aui-toast[data-aui-leaving="true"] {
+  .aui-toast[data-aui-leaving] {
     animation: none;
     opacity: 0;
   }

@@ -86,9 +86,15 @@
 }
 .aui-code__copy:hover { color: rgb(var(--aui-text)); background: rgb(var(--aui-surface-sunken)); }
 .aui-code__copy-icon { display: inline-flex; }
-/* The copy hook may toggle [data-aui-copied] to reflect success. */
+/* The copy hook may toggle [data-aui-copied] to reflect success. On success we
+   replace the whole "Copy" label with "Copied" (hiding the original text rather
+   than appending to it, which previously produced "Copyied"). */
 .aui-code__copy[data-aui-copied] { color: rgb(var(--aui-success)); border-color: rgb(var(--aui-success)); }
-.aui-code__copy[data-aui-copied] .aui-code__copy-label::after { content: "ied"; }
+.aui-code__copy[data-aui-copied] .aui-code__copy-label { font-size: 0; }
+.aui-code__copy[data-aui-copied] .aui-code__copy-label::after {
+  content: "Copied";
+  font-size: var(--aui-text-xs);
+}
 
 .aui-code__scroll {
   overflow-x: auto;

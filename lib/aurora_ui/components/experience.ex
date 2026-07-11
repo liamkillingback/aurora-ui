@@ -212,8 +212,7 @@ defmodule AuroraUI.Components.Experience do
       id={@id}
       class="aui-tilt"
       phx-hook="AuroraTilt"
-      data-aui-max-deg={@max_deg}
-      style={"--aui-tilt-max: #{@max_deg}deg;"}
+      data-aui-tilt-max={@max_deg}
       {@rest}
     >
       {render_slot(@inner_block)}

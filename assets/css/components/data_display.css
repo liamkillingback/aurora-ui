@@ -60,6 +60,14 @@
   z-index: 1;
   border-radius: inherit;
 }
+/* The stretched link's own focus outline would be painted just outside the
+   card's padding box and clipped away by the card's `overflow: hidden`, leaving
+   a focused card with no visible ring. Surface the ring on the card itself
+   instead (its own outline is not clipped by its own overflow) and suppress the
+   link's clipped one. */
+.aui-card__link:focus-visible {
+  outline: none;
+}
 .aui-card--interactive:hover {
   border-color: rgb(var(--aui-border-strong));
   box-shadow: var(--aui-shadow-md);
@@ -67,6 +75,8 @@
 }
 .aui-card--interactive:focus-within {
   border-color: rgb(var(--aui-action));
+  outline: 2px solid rgb(var(--aui-ring));
+  outline-offset: 2px;
 }
 .aui-card--selected {
   border-color: rgb(var(--aui-action));

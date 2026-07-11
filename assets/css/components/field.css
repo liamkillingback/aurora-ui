@@ -60,18 +60,31 @@
   border-color: rgb(var(--aui-text-subtle));
 }
 
-/* Focus — the ring is owned by the input via .aui-focusable / the base rule;
-   here we only tint the container border so affixes read as one control. */
-.aui-field__control:focus-within {
+/* Focus — the CONTROL owns a single ring so the affixes + input read as one
+   control. Without this the inner input drew its own base focus outline inset
+   inside the padded box, producing a doubled/floating ring; that outline is
+   suppressed below. The :not() clauses match the hover rule's specificity so
+   the border stays action-coloured even while the pointer hovers a focused
+   field. */
+.aui-field__control:focus-within:not([data-disabled]):not([data-readonly]) {
   border-color: rgb(var(--aui-action));
+  outline: 2px solid rgb(var(--aui-ring));
+  outline-offset: 2px;
 }
 
 /* Invalid. */
 .aui-field__control[data-invalid] {
   border-color: rgb(var(--aui-danger));
 }
-.aui-field__control[data-invalid]:focus-within {
+.aui-field__control[data-invalid]:focus-within:not([data-disabled]):not([data-readonly]) {
   border-color: rgb(var(--aui-danger));
+  outline-color: rgb(var(--aui-danger));
+}
+
+/* The control surfaces the focus ring; suppress the inner control's own base
+   outline so we never render two concentric rings. */
+.aui-field__control .aui-field__input:focus-visible {
+  outline: none;
 }
 
 /* Disabled / readonly. */

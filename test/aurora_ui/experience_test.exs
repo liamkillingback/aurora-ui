@@ -96,8 +96,8 @@ defmodule AuroraUI.Components.ExperienceTest do
       assert html =~ "Feature"
       assert html =~ "aui-tilt"
       assert html =~ ~s(phx-hook="AuroraTilt")
-      assert html =~ ~s(data-aui-max-deg="6")
-      assert html =~ "--aui-tilt-max: 6deg"
+      # The hook (motion.js) reads the max angle from data-aui-tilt-max.
+      assert html =~ ~s(data-aui-tilt-max="6")
     end
   end
 

@@ -9,18 +9,17 @@
 
 /* ---------------------------------------------------------------------------
  * Tilt — subtle pointer-driven 3D. The AuroraTilt hook (lazy) publishes the
- * rotation as --aui-rx / --aui-ry and toggles [data-aui-tilt-active]. The angle
- * ceiling comes from --aui-tilt-max (set inline from the `max_deg` attr). Tilt
- * is additive feedback only: no content depends on it.
+ * live rotation/scale as the custom properties --aui-tilt-x / --aui-tilt-y /
+ * --aui-tilt-scale (and toggles [data-aui-tilting] while the pointer is over
+ * the element). The base transform consumes those properties directly, falling
+ * back to the rest pose, so the transition eases both in and out. Tilt is
+ * additive feedback only: no content depends on it.
  * ------------------------------------------------------------------------- */
 .aui-tilt {
-  --aui-tilt-max: 8deg;
-  transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+  transform: perspective(800px) rotateX(var(--aui-tilt-x, 0deg))
+    rotateY(var(--aui-tilt-y, 0deg)) scale(var(--aui-tilt-scale, 1));
   transform-style: preserve-3d;
   transition: transform var(--aui-dur-2) var(--aui-ease-standard);
-}
-.aui-tilt[data-aui-tilt-active] {
-  transform: perspective(800px) rotateX(var(--aui-ry, 0deg)) rotateY(var(--aui-rx, 0deg));
 }
 
 /* Global opt-out for a subtree (e.g. a user "reduce effects" toggle). */
@@ -31,8 +30,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aui-tilt,
-  .aui-tilt[data-aui-tilt-active] {
+  .aui-tilt {
     transform: none;
     transition: none;
   }

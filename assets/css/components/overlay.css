@@ -179,12 +179,16 @@
 .aui-drawer--top { margin-block: 0 auto; }
 .aui-drawer--top .aui-drawer__box {
   block-size: auto;
+  /* Cap the box (not just the dialog) so tall content scrolls inside via the
+     body's overflow-y instead of spilling past the 85dvh band. */
+  max-block-size: 85dvh;
   border-end-start-radius: var(--aui-radius-lg);
   border-end-end-radius: var(--aui-radius-lg);
 }
 .aui-drawer--bottom { margin-block: auto 0; }
 .aui-drawer--bottom .aui-drawer__box {
   block-size: auto;
+  max-block-size: 85dvh;
   border-start-start-radius: var(--aui-radius-lg);
   border-start-end-radius: var(--aui-radius-lg);
 }
