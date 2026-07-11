@@ -1,0 +1,59 @@
+/* Aurora UI — motion utilities.
+ *
+ * These are the CSS side of the experience primitives. Every animation here has
+ * a reduced-motion equivalent that conveys the same state change without
+ * translation/scale motion (per WCAG 2.2 and the motion system in docs/motion.md).
+ */
+
+/* Reveal on scroll — the JS Reveal hook toggles [data-aui-revealed]. Without JS
+   the content is visible (progressive enhancement): the hidden state only
+   applies once the hook has claimed the element. */
+[data-aui-reveal][data-aui-hook="ready"] {
+  opacity: 0;
+  transform: translateY(var(--aui-distance-lg));
+  transition:
+    opacity var(--aui-dur-4) var(--aui-ease-standard),
+    transform var(--aui-dur-4) var(--aui-ease-standard);
+}
+[data-aui-reveal][data-aui-revealed] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered children — index set as --aui-i by the hook. */
+[data-aui-stagger] > * {
+  transition-delay: calc(var(--aui-i, 0) * var(--aui-stagger));
+}
+
+/* Spotlight — pointer position published as --aui-mx/--aui-my by the Spotlight hook. */
+.aui-spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.aui-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--aui-dur-2) var(--aui-ease-standard);
+  background: radial-gradient(
+    260px circle at var(--aui-mx, 50%) var(--aui-my, 50%),
+    rgb(var(--aui-ring) / 0.12),
+    transparent 60%
+  );
+  z-index: -1;
+}
+.aui-spotlight[data-aui-spot-active]::before { opacity: 1; }
+
+@keyframes aui-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aui-slide-up { from { opacity: 0; transform: translateY(var(--aui-distance-md)); } to { opacity: 1; transform: none; } }
+@keyframes aui-scale-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Reveal/stagger collapse to a plain fade — same causality, no travel. */
+  [data-aui-reveal][data-aui-hook="ready"] { transform: none; }
+  [data-aui-stagger] > * { transition-delay: 0ms; }
+  .aui-spotlight::before { display: none; }
+}

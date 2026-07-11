@@ -1,0 +1,298 @@
+/*!
+ * Aurora UI — design tokens + component styles
+ * MIT License. https://github.com/liamkillingback/aurora-ui
+ *
+ * This stylesheet is split into cascade layers so consumer styles can win
+ * predictably. Import it once, before your own app layer:
+ *
+ *   @import "aurora_ui/aurora_ui.css";
+ *
+ * Everything visual resolves to a CSS custom property under `--aui-*`. To
+ * theme Aurora UI, override those properties on `:root` (or any scope) in your
+ * OWN css — never edit this file. Semantic tokens (surface/text/action/...) are
+ * intentionally brand-neutral; the PHXTemplates demo brand tokens live only in
+ * the docs app, not here.
+ */
+
+@layer aui.reset, aui.tokens, aui.base, aui.components, aui.utilities;
+
+/* ────────────────────────────────────────────────────────────────────────
+   TOKENS — light theme is the default; dark is an independent token set.
+   Both are authored by hand and contrast-validated (see test/theme_contrast).
+   ──────────────────────────────────────────────────────────────────────── */
+@layer aui.tokens {
+  :root,
+  [data-aui-theme="light"] {
+    color-scheme: light;
+
+    /* Canvas & surfaces (elevation ladder) */
+    --aui-canvas: 250 250 252;
+    --aui-surface: 255 255 255;
+    --aui-surface-raised: 255 255 255;
+    --aui-surface-sunken: 244 244 248;
+    --aui-surface-overlay: 255 255 255;
+
+    /* Text */
+    --aui-text: 17 20 28;
+    --aui-text-muted: 90 96 110;
+    --aui-text-subtle: 128 134 148;
+    --aui-text-on-action: 255 255 255;
+
+    /* Borders & separators */
+    --aui-border: 224 226 232;
+    --aui-border-strong: 200 203 212;
+    --aui-ring: 56 132 248;
+
+    /* Action / primary */
+    --aui-action: 37 99 235;
+    --aui-action-hover: 29 78 216;
+    --aui-action-active: 30 64 175;
+    --aui-action-subtle: 219 234 254;
+
+    /* Status */
+    --aui-success: 21 128 61;
+    --aui-success-subtle: 220 252 231;
+    --aui-warning: 180 83 9;
+    --aui-warning-subtle: 254 243 199;
+    --aui-danger: 190 40 44;
+    --aui-danger-subtle: 254 226 226;
+    --aui-info: 3 105 161;
+    --aui-info-subtle: 224 242 254;
+
+    /* Data / chart ramp (categorical, contrast-checked on canvas) */
+    --aui-data-1: 37 99 235;
+    --aui-data-2: 5 150 105;
+    --aui-data-3: 217 119 6;
+    --aui-data-4: 190 40 44;
+    --aui-data-5: 124 58 237;
+    --aui-data-6: 8 145 178;
+
+    /* Elevation (shadows) */
+    --aui-shadow-sm: 0 1px 2px 0 rgb(17 20 28 / 0.06);
+    --aui-shadow-md: 0 4px 12px -2px rgb(17 20 28 / 0.10), 0 2px 4px -2px rgb(17 20 28 / 0.06);
+    --aui-shadow-lg: 0 16px 40px -12px rgb(17 20 28 / 0.22);
+    --aui-shadow-ring: 0 0 0 1px rgb(17 20 28 / 0.05);
+  }
+
+  [data-aui-theme="dark"] {
+    color-scheme: dark;
+
+    --aui-canvas: 5 9 20;
+    --aui-surface: 11 19 34;
+    --aui-surface-raised: 17 26 43;
+    --aui-surface-sunken: 8 14 26;
+    --aui-surface-overlay: 17 26 43;
+
+    --aui-text: 226 232 240;
+    --aui-text-muted: 148 160 178;
+    --aui-text-subtle: 108 120 138;
+    --aui-text-on-action: 255 255 255;
+
+    --aui-border: 34 46 68;
+    --aui-border-strong: 51 66 92;
+    --aui-ring: 56 189 248;
+
+    --aui-action: 56 189 248;
+    --aui-action-hover: 125 211 252;
+    --aui-action-active: 14 165 233;
+    --aui-action-subtle: 12 74 110;
+
+    --aui-success: 74 222 128;
+    --aui-success-subtle: 5 46 22;
+    --aui-warning: 251 191 36;
+    --aui-warning-subtle: 66 32 6;
+    --aui-danger: 248 113 113;
+    --aui-danger-subtle: 69 10 10;
+    --aui-info: 56 189 248;
+    --aui-info-subtle: 8 47 73;
+
+    --aui-data-1: 56 189 248;
+    --aui-data-2: 52 211 153;
+    --aui-data-3: 251 191 36;
+    --aui-data-4: 248 113 113;
+    --aui-data-5: 167 139 250;
+    --aui-data-6: 34 211 238;
+
+    /* action text needs a dark ink on the bright dark-mode accent */
+    --aui-text-on-action: 5 9 20;
+
+    --aui-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --aui-shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --aui-shadow-lg: 0 16px 50px -12px rgb(0 0 0 / 0.7);
+    --aui-shadow-ring: 0 0 0 1px rgb(255 255 255 / 0.04);
+  }
+
+  /* Respect the OS preference when the consumer hasn't pinned a theme. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-aui-theme]) {
+      color-scheme: dark;
+      --aui-canvas: 5 9 20;
+      --aui-surface: 11 19 34;
+      --aui-surface-raised: 17 26 43;
+      --aui-surface-sunken: 8 14 26;
+      --aui-surface-overlay: 17 26 43;
+      --aui-text: 226 232 240;
+      --aui-text-muted: 148 160 178;
+      --aui-text-subtle: 108 120 138;
+      --aui-text-on-action: 5 9 20;
+      --aui-border: 34 46 68;
+      --aui-border-strong: 51 66 92;
+      --aui-ring: 56 189 248;
+      --aui-action: 56 189 248;
+      --aui-action-hover: 125 211 252;
+      --aui-action-active: 14 165 233;
+      --aui-action-subtle: 12 74 110;
+      --aui-success: 74 222 128;
+      --aui-success-subtle: 5 46 22;
+      --aui-warning: 251 191 36;
+      --aui-warning-subtle: 66 32 6;
+      --aui-danger: 248 113 113;
+      --aui-danger-subtle: 69 10 10;
+      --aui-info: 56 189 248;
+      --aui-info-subtle: 8 47 73;
+      --aui-data-1: 56 189 248;
+      --aui-data-2: 52 211 153;
+      --aui-data-3: 251 191 36;
+      --aui-data-4: 248 113 113;
+      --aui-data-5: 167 139 250;
+      --aui-data-6: 34 211 238;
+      --aui-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+      --aui-shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+      --aui-shadow-lg: 0 16px 50px -12px rgb(0 0 0 / 0.7);
+      --aui-shadow-ring: 0 0 0 1px rgb(255 255 255 / 0.04);
+    }
+  }
+
+  :root {
+    /* Non-color tokens are theme-independent. */
+    /* Radii */
+    --aui-radius-xs: 0.25rem;
+    --aui-radius-sm: 0.375rem;
+    --aui-radius-md: 0.5rem;
+    --aui-radius-lg: 0.75rem;
+    --aui-radius-xl: 1rem;
+    --aui-radius-full: 9999px;
+
+    /* Spacing scale (rem, 4px base) */
+    --aui-space-1: 0.25rem;
+    --aui-space-2: 0.5rem;
+    --aui-space-3: 0.75rem;
+    --aui-space-4: 1rem;
+    --aui-space-5: 1.25rem;
+    --aui-space-6: 1.5rem;
+    --aui-space-8: 2rem;
+    --aui-space-10: 2.5rem;
+    --aui-space-12: 3rem;
+
+    /* Type scale */
+    --aui-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    --aui-font-mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo,
+      Consolas, monospace;
+    --aui-text-xs: 0.75rem;
+    --aui-text-sm: 0.875rem;
+    --aui-text-base: 1rem;
+    --aui-text-lg: 1.125rem;
+    --aui-text-xl: 1.375rem;
+    --aui-text-2xl: 1.75rem;
+    --aui-leading-tight: 1.2;
+    --aui-leading-normal: 1.5;
+
+    /* Sizing — control heights keep a 44px min touch target on `md`. */
+    --aui-control-sm: 2rem;
+    --aui-control-md: 2.5rem;
+    --aui-control-lg: 3rem;
+    --aui-touch-min: 44px;
+
+    /* Layering — a single documented z-index ladder for overlays. */
+    --aui-z-base: 0;
+    --aui-z-sticky: 100;
+    --aui-z-dropdown: 1000;
+    --aui-z-overlay: 1100;
+    --aui-z-modal: 1200;
+    --aui-z-toast: 1300;
+    --aui-z-tooltip: 1400;
+
+    /* Content measure */
+    --aui-measure: 68ch;
+
+    /* Motion — named durations, easings, distances, stagger. */
+    --aui-dur-1: 120ms; /* micro: hover, press */
+    --aui-dur-2: 180ms; /* small enter/exit */
+    --aui-dur-3: 240ms; /* overlays */
+    --aui-dur-4: 360ms; /* emphasis / spatial */
+    --aui-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --aui-ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+    --aui-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+    --aui-distance-sm: 4px;
+    --aui-distance-md: 8px;
+    --aui-distance-lg: 16px;
+    --aui-stagger: 40ms;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   BASE — minimal, opt-in. Aurora UI never restyles bare consumer elements
+   beyond focus visibility; components carry their own styles.
+   ──────────────────────────────────────────────────────────────────────── */
+@layer aui.base {
+  [data-aui-root] {
+    background-color: rgb(var(--aui-canvas));
+    color: rgb(var(--aui-text));
+    font-family: var(--aui-font-sans);
+  }
+
+  /* A single, consistent focus-visible ring for every interactive component. */
+  .aui-focusable:focus-visible,
+  [data-aui] :focus-visible {
+    outline: 2px solid rgb(var(--aui-ring));
+    outline-offset: 2px;
+    border-radius: var(--aui-radius-sm);
+  }
+
+  /* Forced-colors: let the OS own color, keep structure legible. */
+  @media (forced-colors: active) {
+    [data-aui] {
+      --aui-shadow-sm: none;
+      --aui-shadow-md: none;
+      --aui-shadow-lg: none;
+    }
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Reduced motion — a global equivalent, not merely slower animation. All
+   component-level animations are additionally gated on this at their source.
+   ──────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-aui] *,
+  [data-aui] *::before,
+  [data-aui] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Component styles are appended by the family stylesheets in
+ * assets/css/components/*.css (imported below). Each stays inside the
+ * aui.components layer and references only tokens above.
+ */
+@import "./components/actions.css" layer(aui.components);
+@import "./components/field.css" layer(aui.components);
+@import "./components/choices.css" layer(aui.components);
+@import "./components/selection.css" layer(aui.components);
+@import "./components/navigation.css" layer(aui.components);
+@import "./components/tabs.css" layer(aui.components);
+@import "./components/overlay.css" layer(aui.components);
+@import "./components/floating.css" layer(aui.components);
+@import "./components/feedback.css" layer(aui.components);
+@import "./components/data_display.css" layer(aui.components);
+@import "./components/data_navigation.css" layer(aui.components);
+@import "./components/progress.css" layer(aui.components);
+@import "./components/command.css" layer(aui.components);
+@import "./components/media.css" layer(aui.components);
+@import "./components/experience.css" layer(aui.components);
+@import "./components/motion.css" layer(aui.utilities);

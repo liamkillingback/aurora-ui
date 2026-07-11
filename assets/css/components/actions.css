@@ -1,0 +1,139 @@
+/* Aurora UI — Actions family (button, icon button, group, link). */
+
+.aui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.aui-btn {
+  --_bg: transparent;
+  --_fg: rgb(var(--aui-text));
+  --_bd: transparent;
+  --_bg-hover: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--aui-space-2);
+  border: 1px solid var(--_bd);
+  background: var(--_bg);
+  color: var(--_fg);
+  font: inherit;
+  font-weight: 550;
+  line-height: 1;
+  border-radius: var(--aui-radius-md);
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--aui-dur-1) var(--aui-ease-standard),
+    border-color var(--aui-dur-1) var(--aui-ease-standard),
+    color var(--aui-dur-1) var(--aui-ease-standard),
+    transform var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-btn:hover:not([disabled]):not([aria-disabled="true"]) {
+  background: var(--_bg-hover);
+}
+.aui-btn:active:not([disabled]):not([aria-disabled="true"]) {
+  transform: translateY(0.5px) scale(0.99);
+}
+.aui-btn[disabled],
+.aui-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Sizes — md keeps a 44px min touch target. */
+.aui-btn--sm { height: var(--aui-control-sm); padding-inline: var(--aui-space-3); font-size: var(--aui-text-sm); }
+.aui-btn--md { height: var(--aui-control-md); min-height: var(--aui-touch-min); padding-inline: var(--aui-space-4); font-size: var(--aui-text-sm); }
+.aui-btn--lg { height: var(--aui-control-lg); padding-inline: var(--aui-space-6); font-size: var(--aui-text-base); }
+.aui-btn--icon { padding-inline: 0; aspect-ratio: 1; }
+.aui-btn--icon.aui-btn--md { width: var(--aui-control-md); }
+.aui-btn--icon.aui-btn--sm { width: var(--aui-control-sm); }
+.aui-btn--icon.aui-btn--lg { width: var(--aui-control-lg); }
+.aui-btn--block { width: 100%; }
+
+/* Variants */
+.aui-btn--primary {
+  --_bg: rgb(var(--aui-action));
+  --_bg-hover: rgb(var(--aui-action-hover));
+  --_fg: rgb(var(--aui-text-on-action));
+  --_bd: transparent;
+  box-shadow: var(--aui-shadow-sm);
+}
+.aui-btn--secondary {
+  --_bg: rgb(var(--aui-surface));
+  --_bg-hover: rgb(var(--aui-surface-sunken));
+  --_fg: rgb(var(--aui-text));
+  --_bd: rgb(var(--aui-border-strong));
+}
+.aui-btn--ghost {
+  --_bg: transparent;
+  --_bg-hover: rgb(var(--aui-surface-sunken));
+  --_fg: rgb(var(--aui-text));
+}
+.aui-btn--subtle {
+  --_bg: rgb(var(--aui-action-subtle));
+  --_bg-hover: rgb(var(--aui-action-subtle) / 0.7);
+  --_fg: rgb(var(--aui-action));
+}
+.aui-btn--danger {
+  --_bg: rgb(var(--aui-danger));
+  --_bg-hover: rgb(var(--aui-danger) / 0.85);
+  --_fg: rgb(var(--aui-text-on-action));
+}
+.aui-btn--link {
+  --_bg: transparent;
+  --_fg: rgb(var(--aui-action));
+  height: auto;
+  padding-inline: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.aui-btn__label { display: inline-flex; align-items: center; }
+.aui-btn__icon { display: inline-flex; width: 1.15em; height: 1.15em; }
+.aui-btn__icon > :where(svg) { width: 100%; height: 100%; }
+
+.aui-btn--loading .aui-btn__label { opacity: 0.85; }
+.aui-btn__spinner {
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: var(--aui-radius-full);
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: aui-spin 0.7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-btn__spinner { animation-duration: 1.4s; }
+}
+
+/* Button group — collapse adjoining borders into a segmented cluster. */
+.aui-btn-group { display: inline-flex; }
+.aui-btn-group > .aui-btn { border-radius: 0; }
+.aui-btn-group > .aui-btn:first-child { border-start-start-radius: var(--aui-radius-md); border-end-start-radius: var(--aui-radius-md); }
+.aui-btn-group > .aui-btn:last-child { border-start-end-radius: var(--aui-radius-md); border-end-end-radius: var(--aui-radius-md); }
+.aui-btn-group > .aui-btn + .aui-btn { margin-inline-start: -1px; }
+.aui-btn-group > .aui-btn:focus-visible { z-index: 1; }
+
+/* Links */
+.aui-link {
+  color: rgb(var(--aui-action));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  border-radius: var(--aui-radius-xs);
+}
+.aui-link:hover { text-decoration-thickness: 2px; }
+.aui-link--subtle { color: rgb(var(--aui-text)); text-decoration-color: rgb(var(--aui-border-strong)); }
+.aui-link--quiet { color: inherit; text-decoration: none; }
+.aui-link--quiet:hover { text-decoration: underline; }
+
+@keyframes aui-spin { to { transform: rotate(360deg); } }
