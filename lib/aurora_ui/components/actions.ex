@@ -55,13 +55,17 @@ defmodule AuroraUI.Components.Actions do
   """
   def button(assigns) do
     assigns =
-      assign(assigns, :class, [
-        "aui-btn aui-focusable",
-        "aui-btn--#{variant(button_variant_map(), assigns.variant, "primary")}",
-        "aui-btn--#{variant(size_map(), assigns.size, "md")}",
-        {"aui-btn--block", assigns.full_width},
-        {"aui-btn--loading", assigns.loading}
-      ])
+      assign(
+        assigns,
+        :class,
+        cx([
+          "aui-btn aui-focusable",
+          "aui-btn--#{variant(button_variant_map(), assigns.variant, "primary")}",
+          "aui-btn--#{variant(size_map(), assigns.size, "md")}",
+          {"aui-btn--block", assigns.full_width},
+          {"aui-btn--loading", assigns.loading}
+        ])
+      )
 
     ~H"""
     <.link
@@ -118,12 +122,16 @@ defmodule AuroraUI.Components.Actions do
   """
   def icon_button(assigns) do
     assigns =
-      assign(assigns, :class, [
-        "aui-btn aui-btn--icon aui-focusable",
-        "aui-btn--#{variant(button_variant_map(), assigns.variant, "ghost")}",
-        "aui-btn--#{variant(size_map(), assigns.size, "md")}",
-        {"aui-btn--loading", assigns.loading}
-      ])
+      assign(
+        assigns,
+        :class,
+        cx([
+          "aui-btn aui-btn--icon aui-focusable",
+          "aui-btn--#{variant(button_variant_map(), assigns.variant, "ghost")}",
+          "aui-btn--#{variant(size_map(), assigns.size, "md")}",
+          {"aui-btn--loading", assigns.loading}
+        ])
+      )
 
     ~H"""
     <button

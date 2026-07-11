@@ -1,1 +1,322 @@
-/* Aurora UI — command family styles. Populated with the family module. */
+/* Aurora UI — Command family (search field, results, command palette). */
+
+/* ── Search field ─────────────────────────────────────────────────────────
+   `role="search"` landmark wrapping a searchbox with leading icon, optional
+   spinner, and a clear button that auto-hides while the field is empty. */
+.aui-search {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  inline-size: 100%;
+}
+.aui-search__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.aui-search__icon {
+  position: absolute;
+  inset-inline-start: var(--aui-space-3);
+  display: inline-flex;
+  color: rgb(var(--aui-text-subtle));
+  font-size: var(--aui-text-base);
+  pointer-events: none;
+}
+.aui-search__input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  height: var(--aui-control-md);
+  min-height: var(--aui-touch-min);
+  /* room for the leading icon and the trailing clear/spinner */
+  padding-block: 0;
+  padding-inline: calc(var(--aui-space-3) + 1.35em) calc(var(--aui-space-3) + 1.6em);
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text));
+  background: rgb(var(--aui-surface));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+}
+.aui-search__input::placeholder { color: rgb(var(--aui-text-subtle)); }
+/* Hide the native search decorations; we provide our own clear affordance. */
+.aui-search__input::-webkit-search-decoration,
+.aui-search__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.aui-search--sm .aui-search__input { height: var(--aui-control-sm); font-size: var(--aui-text-xs); }
+.aui-search--lg .aui-search__input { height: var(--aui-control-lg); font-size: var(--aui-text-base); }
+
+.aui-search__clear {
+  position: absolute;
+  inset-inline-end: var(--aui-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.75em;
+  block-size: 1.75em;
+  padding: 0;
+  color: rgb(var(--aui-text-muted));
+  background: transparent;
+  border: 0;
+  border-radius: var(--aui-radius-full);
+  cursor: pointer;
+}
+.aui-search__clear:hover { color: rgb(var(--aui-text)); background: rgb(var(--aui-surface-sunken)); }
+/* Only offer "clear" when there is text to clear. */
+.aui-search__control:has(.aui-search__input:placeholder-shown) .aui-search__clear { display: none; }
+
+.aui-search__spinner {
+  position: absolute;
+  inset-inline-end: var(--aui-space-3);
+  inline-size: 1.05em;
+  block-size: 1.05em;
+  border-radius: var(--aui-radius-full);
+  border: 2px solid rgb(var(--aui-text-subtle));
+  border-top-color: transparent;
+  animation: aui-command-spin 0.7s linear infinite;
+}
+/* While busy the spinner sits where the clear button would; hide the latter. */
+.aui-search__control:has(.aui-search__input[aria-busy="true"]) .aui-search__clear { display: none; }
+
+/* ── Search results ───────────────────────────────────────────────────────
+   Semantic list (not a listbox): results are navigable content, not options. */
+.aui-search-results { display: block; }
+.aui-search-results__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.aui-search-results__group + .aui-search-results__group { margin-block-start: var(--aui-space-4); }
+.aui-search-results__group-label {
+  margin: 0 0 var(--aui-space-1);
+  padding-inline: var(--aui-space-3);
+  font-size: var(--aui-text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--aui-text-subtle));
+}
+
+.aui-search-result { display: block; }
+.aui-search-result__link {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  color: rgb(var(--aui-text));
+  text-decoration: none;
+  border-radius: var(--aui-radius-md);
+}
+a.aui-search-result__link:hover,
+.aui-search-result--active > .aui-search-result__link {
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-search-result__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: rgb(var(--aui-text-muted));
+}
+.aui-search-result__body { flex: 1 1 auto; min-inline-size: 0; }
+.aui-search-result__meta {
+  flex: 0 0 auto;
+  color: rgb(var(--aui-text-subtle));
+  font-size: var(--aui-text-xs);
+}
+
+.aui-search-results__empty {
+  padding: var(--aui-space-6) var(--aui-space-4);
+  text-align: center;
+  color: rgb(var(--aui-text-muted));
+}
+.aui-search-results__empty-text { margin: 0; }
+
+/* ── Command palette ──────────────────────────────────────────────────────
+   Visible trigger + a dialog (combobox + listbox). */
+.aui-command { display: inline-block; }
+
+.aui-command__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  min-height: var(--aui-touch-min);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  color: rgb(var(--aui-text-muted));
+  background: rgb(var(--aui-surface));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  cursor: pointer;
+}
+.aui-command__trigger:hover { background: rgb(var(--aui-surface-sunken)); color: rgb(var(--aui-text)); }
+.aui-command__trigger-icon { display: inline-flex; }
+.aui-command__trigger-label { flex: 1 1 auto; text-align: start; }
+
+.aui-command__kbd {
+  font-family: var(--aui-font-mono);
+  font-size: var(--aui-text-xs);
+  line-height: 1;
+  padding: 0.15em 0.45em;
+  color: rgb(var(--aui-text-muted));
+  background: rgb(var(--aui-surface-sunken));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-sm);
+}
+
+/* Dialog + backdrop */
+.aui-command__dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--aui-z-modal);
+  display: grid;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: start;
+  padding: clamp(var(--aui-space-4), 10vh, var(--aui-space-12)) var(--aui-space-4);
+  overflow-y: auto;
+}
+.aui-command__dialog[hidden] { display: none; }
+.aui-command__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(var(--aui-text) / 0.45);
+}
+
+.aui-command__panel {
+  position: relative;
+  inline-size: min(40rem, 100%);
+  max-block-size: min(70vh, 40rem);
+  display: flex;
+  flex-direction: column;
+  background: rgb(var(--aui-surface-overlay));
+  color: rgb(var(--aui-text));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  box-shadow: var(--aui-shadow-lg);
+  overflow: hidden;
+  animation: aui-command-in var(--aui-dur-3) var(--aui-ease-emphasized);
+}
+
+.aui-command__search {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-3) var(--aui-space-3);
+  border-bottom: 1px solid rgb(var(--aui-border));
+}
+.aui-command__search-icon { display: inline-flex; color: rgb(var(--aui-text-subtle)); }
+.aui-command__input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  height: var(--aui-control-md);
+  font: inherit;
+  font-size: var(--aui-text-base);
+  color: rgb(var(--aui-text));
+  background: transparent;
+  border: 0;
+}
+.aui-command__input::placeholder { color: rgb(var(--aui-text-subtle)); }
+.aui-command__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.9em;
+  block-size: 1.9em;
+  padding: 0;
+  color: rgb(var(--aui-text-muted));
+  background: transparent;
+  border: 0;
+  border-radius: var(--aui-radius-full);
+  cursor: pointer;
+}
+.aui-command__close:hover { background: rgb(var(--aui-surface-sunken)); color: rgb(var(--aui-text)); }
+
+.aui-command__hint {
+  padding: var(--aui-space-2) var(--aui-space-3);
+  font-size: var(--aui-text-xs);
+  color: rgb(var(--aui-text-subtle));
+  border-bottom: 1px solid rgb(var(--aui-border));
+}
+.aui-command__hint .aui-command__kbd { margin-inline: 0.15em; }
+
+.aui-command__list {
+  list-style: none;
+  margin: 0;
+  padding: var(--aui-space-2);
+  overflow-y: auto;
+}
+.aui-command__group + .aui-command__group { margin-block-start: var(--aui-space-2); }
+.aui-command__group-label {
+  display: block;
+  padding: var(--aui-space-1) var(--aui-space-2);
+  font-size: var(--aui-text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--aui-text-subtle));
+}
+.aui-command__group-items { list-style: none; margin: 0; padding: 0; }
+
+/* Command items (consumer-supplied role=option elements). */
+.aui-command__list :where([role="option"]) {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-3);
+  inline-size: 100%;
+  padding: var(--aui-space-2) var(--aui-space-2);
+  color: rgb(var(--aui-text));
+  text-align: start;
+  background: transparent;
+  border: 0;
+  border-radius: var(--aui-radius-md);
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  cursor: pointer;
+}
+.aui-command__list :where([role="option"]):hover,
+.aui-command__list :where([role="option"][aria-selected="true"]),
+.aui-command__list :where([role="option"][data-aui-active]) {
+  background: rgb(var(--aui-action-subtle));
+  color: rgb(var(--aui-action));
+}
+
+.aui-command__empty {
+  padding: var(--aui-space-6) var(--aui-space-4);
+  text-align: center;
+  color: rgb(var(--aui-text-muted));
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────────*/
+@keyframes aui-command-spin { to { transform: rotate(360deg); } }
+@keyframes aui-command-in {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--aui-distance-md))); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-search__spinner { animation-duration: 1.4s; }
+  .aui-command__panel { animation: aui-command-fade var(--aui-dur-1) var(--aui-ease-standard); }
+}
+@keyframes aui-command-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Forced colors ───────────────────────────────────────────────────────*/
+@media (forced-colors: active) {
+  .aui-command__panel,
+  .aui-search__input,
+  .aui-command__trigger { border: 1px solid CanvasText; }
+  .aui-search-result--active > .aui-search-result__link,
+  .aui-command__list :where([role="option"][aria-selected="true"]) {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+/* ── Print ───────────────────────────────────────────────────────────────*/
+@media print {
+  .aui-command__dialog { display: none !important; }
+}

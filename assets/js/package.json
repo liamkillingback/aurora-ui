@@ -1,0 +1,36 @@
+{
+  "name": "aurora_ui",
+  "version": "0.1.0",
+  "description": "Aurora UI — vanilla-JS LiveView hooks for the Aurora UI Phoenix component kit. Core hooks are lightweight; command palette, tilt, and the Three.js scene are code-split and loaded on demand.",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./command": {
+      "import": "./command.js",
+      "default": "./command.js"
+    },
+    "./motion": {
+      "import": "./motion.js",
+      "default": "./motion.js"
+    },
+    "./three": {
+      "import": "./three/scene.js",
+      "default": "./three/scene.js"
+    }
+  },
+  "peerDependencies": {
+    "three": ">=0.160.0"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  }
+}

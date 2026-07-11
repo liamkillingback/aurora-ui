@@ -1,1 +1,233 @@
-/* Aurora UI — selection family styles. Populated with the family module. */
+/* Aurora UI — Selection family (native select, enhanced combobox).
+   Tokens only; focus via .aui-focusable. */
+
+/* ── Select ───────────────────────────────────────────────────────────────── */
+.aui-select-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+}
+.aui-select__label {
+  color: rgb(var(--aui-text));
+  font-size: var(--aui-text-sm);
+  font-weight: 550;
+}
+.aui-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.aui-select__input {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  font: inherit;
+  block-size: var(--aui-control-md);
+  min-block-size: var(--aui-touch-min);
+  padding-inline: var(--aui-space-3) var(--aui-space-8);
+  color: rgb(var(--aui-text));
+  background: rgb(var(--aui-surface));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+  cursor: pointer;
+  transition: border-color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-select__input:hover:not(:disabled) {
+  border-color: rgb(var(--aui-action));
+}
+.aui-select__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-select__chevron {
+  position: absolute;
+  inset-inline-end: var(--aui-space-3);
+  display: inline-flex;
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  color: rgb(var(--aui-text-muted));
+  pointer-events: none;
+}
+.aui-select__chevron > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.aui-select--sm .aui-select__input {
+  block-size: var(--aui-control-sm);
+  min-block-size: 0;
+  font-size: var(--aui-text-sm);
+}
+.aui-select--lg .aui-select__input {
+  block-size: var(--aui-control-lg);
+  font-size: var(--aui-text-base);
+}
+.aui-select--invalid .aui-select__input {
+  border-color: rgb(var(--aui-danger));
+}
+.aui-select__description {
+  margin: 0;
+  color: rgb(var(--aui-text-muted));
+  font-size: var(--aui-text-xs);
+}
+
+/* ── Combobox ─────────────────────────────────────────────────────────────── */
+.aui-combobox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+}
+.aui-combobox__label {
+  color: rgb(var(--aui-text));
+  font-size: var(--aui-text-sm);
+  font-weight: 550;
+}
+.aui-combobox__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.aui-combobox__input {
+  inline-size: 100%;
+  font: inherit;
+  block-size: var(--aui-control-md);
+  min-block-size: var(--aui-touch-min);
+  padding-inline: var(--aui-space-3) var(--aui-space-10);
+  color: rgb(var(--aui-text));
+  background: rgb(var(--aui-surface));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+  transition: border-color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-combobox__input:hover:not(:disabled) {
+  border-color: rgb(var(--aui-action));
+}
+.aui-combobox__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-combobox--invalid .aui-combobox__input {
+  border-color: rgb(var(--aui-danger));
+}
+
+.aui-combobox__clear {
+  position: absolute;
+  inset-inline-end: var(--aui-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--aui-radius-full);
+  background: transparent;
+  color: rgb(var(--aui-text-muted));
+  cursor: pointer;
+  transition:
+    color var(--aui-dur-1) var(--aui-ease-standard),
+    background-color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-combobox__clear:hover {
+  color: rgb(var(--aui-text));
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-combobox__clear > svg {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
+.aui-combobox__spinner {
+  position: absolute;
+  inset-inline-end: var(--aui-space-9, 2.25rem);
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: var(--aui-radius-full);
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  color: rgb(var(--aui-text-muted));
+  animation: aui-combobox-spin 0.7s linear infinite;
+}
+
+.aui-combobox__listbox {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: var(--aui-z-dropdown);
+  margin: var(--aui-space-1) 0 0;
+  padding: var(--aui-space-1);
+  list-style: none;
+  max-block-size: 16rem;
+  overflow-y: auto;
+  background: rgb(var(--aui-surface-overlay));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-md);
+  box-shadow: var(--aui-shadow-md);
+}
+.aui-combobox__listbox[hidden] {
+  display: none;
+}
+.aui-combobox__option {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  min-block-size: 2.25rem;
+  border-radius: var(--aui-radius-sm);
+  color: rgb(var(--aui-text));
+  font-size: var(--aui-text-sm);
+  cursor: pointer;
+}
+.aui-combobox__option:hover,
+.aui-combobox__option[data-aui-active] {
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-combobox__option[aria-selected="true"] {
+  background: rgb(var(--aui-action-subtle));
+  color: rgb(var(--aui-action));
+}
+.aui-combobox__option[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.aui-combobox__empty {
+  padding: var(--aui-space-3);
+  color: rgb(var(--aui-text-muted));
+  font-size: var(--aui-text-sm);
+  text-align: center;
+}
+
+@keyframes aui-combobox-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .aui-select__input,
+  .aui-combobox__input,
+  .aui-combobox__clear {
+    transition: none;
+  }
+  .aui-combobox__spinner {
+    animation-duration: 1.4s;
+  }
+}
+
+/* ── Forced colors ────────────────────────────────────────────────────────── */
+@media (forced-colors: active) {
+  .aui-select__input,
+  .aui-combobox__input,
+  .aui-combobox__listbox {
+    border-color: ButtonBorder;
+  }
+  .aui-combobox__option[aria-selected="true"],
+  .aui-combobox__option[data-aui-active] {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+}

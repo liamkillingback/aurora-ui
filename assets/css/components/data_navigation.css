@@ -1,1 +1,354 @@
-/* Aurora UI — data_navigation family styles. Populated with the family module. */
+/* Aurora UI — Data navigation family (table, data_grid, filter_bar, empty_state). */
+
+/* ── Semantic table ─────────────────────────────────────────────────────── */
+.aui-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-3);
+  color: rgb(var(--aui-text));
+}
+
+.aui-table__bulk {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  background: rgb(var(--aui-action-subtle));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-md);
+}
+.aui-table__bulk-count {
+  font-size: var(--aui-text-sm);
+  font-weight: 600;
+  color: rgb(var(--aui-text));
+}
+
+/* Horizontal scroll region is focusable so keyboard users can pan it. */
+.aui-table__scroll {
+  overflow-x: auto;
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  background: rgb(var(--aui-surface));
+}
+
+.aui-table__el {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--aui-text-sm);
+}
+
+.aui-table__caption {
+  text-align: start;
+  padding: var(--aui-space-3) var(--aui-space-4);
+  font-size: var(--aui-text-base);
+  font-weight: 600;
+  color: rgb(var(--aui-text));
+  caption-side: top;
+}
+
+.aui-table__th {
+  text-align: start;
+  padding: var(--aui-space-3) var(--aui-space-4);
+  font-weight: 600;
+  color: rgb(var(--aui-text-muted));
+  background: rgb(var(--aui-surface-sunken));
+  border-bottom: 1px solid rgb(var(--aui-border-strong));
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.aui-table__th--select { width: var(--aui-control-md); }
+.aui-table__th--numeric,
+.aui-table__td--numeric {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.aui-table__cell--start { text-align: start; }
+.aui-table__cell--center { text-align: center; }
+.aui-table__cell--end { text-align: end; }
+
+/* Sort button fills the header cell so the whole area is the hit target. */
+.aui-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  background: none;
+  border: 0;
+  margin: calc(var(--aui-space-3) * -1) calc(var(--aui-space-4) * -1);
+  padding: var(--aui-space-3) var(--aui-space-4);
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--aui-radius-sm);
+}
+.aui-table__sort:hover { color: rgb(var(--aui-text)); }
+
+/* Sort indicator: neutral chevrons; the active direction is emphasized. */
+.aui-table__sort-icon {
+  width: 0.85em;
+  height: 0.85em;
+  flex: none;
+  opacity: 0.5;
+  background: currentColor;
+  transition: opacity var(--aui-dur-1) var(--aui-ease-standard);
+  --_sort-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 2 4 6h8zM8 14l4-4H4z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--_sort-mask) center / contain no-repeat;
+  mask: var(--_sort-mask) center / contain no-repeat;
+}
+.aui-table__sort-icon[data-dir="asc"],
+.aui-table__sort-icon[data-dir="desc"] { opacity: 1; }
+.aui-table__sort-icon[data-dir="asc"] {
+  --_sort-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3 3 9h10z'/%3E%3C/svg%3E");
+}
+.aui-table__sort-icon[data-dir="desc"] {
+  --_sort-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 13 3 7h10z'/%3E%3C/svg%3E");
+}
+
+.aui-table__td {
+  padding: var(--aui-space-3) var(--aui-space-4);
+  border-bottom: 1px solid rgb(var(--aui-border));
+  vertical-align: middle;
+}
+.aui-table__row:last-child .aui-table__td { border-bottom: 0; }
+.aui-table__row--selected { background: rgb(var(--aui-action-subtle) / 0.5); }
+.aui-table__row:hover:not(.aui-table__row--selected) {
+  background: rgb(var(--aui-surface-sunken) / 0.6);
+}
+
+.aui-table__checkbox {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: rgb(var(--aui-action));
+  cursor: pointer;
+}
+
+/* Empty / error states fill the row. */
+.aui-table__state {
+  text-align: center;
+  padding: var(--aui-space-8) var(--aui-space-4);
+  color: rgb(var(--aui-text-muted));
+}
+.aui-table__empty-default { color: rgb(var(--aui-text-subtle)); }
+
+/* Skeleton rows while loading. */
+.aui-table__skeleton {
+  display: block;
+  height: 0.85rem;
+  width: 70%;
+  border-radius: var(--aui-radius-full);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--aui-surface-sunken)) 25%,
+    rgb(var(--aui-border)) 37%,
+    rgb(var(--aui-surface-sunken)) 63%
+  );
+  background-size: 400% 100%;
+  animation: aui-table-shimmer 1.4s ease infinite;
+}
+.aui-table__skeleton--box { width: 1.05rem; height: 1.05rem; border-radius: var(--aui-radius-sm); }
+
+@keyframes aui-table-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-table__skeleton { animation: none; }
+}
+
+/* Responsive: stack rows into cards below the breakpoint. Cells expose the
+   column label via data-label so each value stays self-describing. */
+@media (max-width: 48rem) {
+  .aui-table--stack .aui-table__el,
+  .aui-table--stack .aui-table__head,
+  .aui-table--stack .aui-table__body,
+  .aui-table--stack .aui-table__row,
+  .aui-table--stack .aui-table__td { display: block; width: 100%; }
+
+  .aui-table--stack .aui-table__head {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .aui-table--stack .aui-table__row {
+    border: 1px solid rgb(var(--aui-border));
+    border-radius: var(--aui-radius-md);
+    margin: var(--aui-space-3);
+    padding: var(--aui-space-2);
+  }
+  .aui-table--stack .aui-table__td {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--aui-space-4);
+    border-bottom: 1px solid rgb(var(--aui-border) / 0.6);
+    text-align: end;
+  }
+  .aui-table--stack .aui-table__row .aui-table__td:last-child { border-bottom: 0; }
+  .aui-table--stack .aui-table__td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: rgb(var(--aui-text-muted));
+    text-align: start;
+  }
+}
+
+/* ── Interactive data grid ──────────────────────────────────────────────── */
+.aui-grid {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  overflow: hidden;
+  background: rgb(var(--aui-surface));
+  font-size: var(--aui-text-sm);
+}
+.aui-grid__head,
+.aui-grid__body { display: table-row-group; }
+.aui-grid__row { display: table-row; }
+.aui-grid__cell {
+  display: table-cell;
+  padding: var(--aui-space-2) var(--aui-space-4);
+  border-bottom: 1px solid rgb(var(--aui-border));
+  border-inline-end: 1px solid rgb(var(--aui-border));
+  vertical-align: middle;
+}
+.aui-grid__cell--header {
+  font-weight: 600;
+  color: rgb(var(--aui-text-muted));
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-grid__cell[aria-readonly="true"] { color: rgb(var(--aui-text-muted)); }
+.aui-grid__cell[data-aui-editable="true"] { cursor: cell; }
+/* The single roving-focus cell reads as active even before it is focused. */
+.aui-grid__cell[tabindex="0"] {
+  box-shadow: inset 0 0 0 2px rgb(var(--aui-ring) / 0.35);
+}
+
+/* ── Filter bar + chips ─────────────────────────────────────────────────── */
+.aui-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-3);
+  background: rgb(var(--aui-surface));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+}
+.aui-filter__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--aui-space-2);
+}
+.aui-filter__applied {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--aui-space-2);
+}
+.aui-filter__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.aui-filter__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-1);
+  padding: var(--aui-space-1) var(--aui-space-1) var(--aui-space-1) var(--aui-space-3);
+  font-size: var(--aui-text-xs);
+  background: rgb(var(--aui-action-subtle));
+  color: rgb(var(--aui-action));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-full);
+}
+.aui-filter__chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  border-radius: var(--aui-radius-full);
+  background: none;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.aui-filter__chip-remove:hover { background: rgb(var(--aui-action) / 0.15); }
+.aui-filter__clear {
+  border: 0;
+  background: none;
+  color: rgb(var(--aui-action));
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  cursor: pointer;
+  padding: var(--aui-space-1) var(--aui-space-2);
+  border-radius: var(--aui-radius-sm);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.aui-filter__count {
+  margin: 0;
+  margin-inline-start: auto;
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-muted));
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+.aui-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-10) var(--aui-space-6);
+  color: rgb(var(--aui-text));
+}
+.aui-empty--sm { padding: var(--aui-space-6) var(--aui-space-4); }
+.aui-empty--lg { padding: var(--aui-space-12) var(--aui-space-8); }
+.aui-empty__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  color: rgb(var(--aui-text-subtle));
+}
+.aui-empty--lg .aui-empty__icon { width: 4rem; height: 4rem; }
+.aui-empty__icon > :where(svg, img) { width: 100%; height: 100%; }
+.aui-empty__title {
+  margin: 0;
+  font-size: var(--aui-text-lg);
+  font-weight: 600;
+}
+.aui-empty__desc {
+  margin: 0;
+  max-width: 42ch;
+  color: rgb(var(--aui-text-muted));
+}
+.aui-empty__actions {
+  display: flex;
+  gap: var(--aui-space-3);
+  margin-top: var(--aui-space-2);
+}
+
+/* Forced-colors: keep grid/table structure legible via system borders. */
+@media (forced-colors: active) {
+  .aui-table__scroll,
+  .aui-grid,
+  .aui-filter,
+  .aui-filter__chip {
+    border: 1px solid CanvasText;
+  }
+  .aui-grid__cell[tabindex="0"] { outline: 2px solid Highlight; outline-offset: -2px; }
+  .aui-table__skeleton { background: GrayText; }
+}

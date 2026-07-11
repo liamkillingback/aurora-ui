@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / usage help
+    url: https://github.com/liamkillingback/aurora-ui/discussions/categories/q-a
+    about: Ask in Discussions Q&A — please search first.
+  - name: Security vulnerability
+    url: https://github.com/liamkillingback/aurora-ui/security/advisories/new
+    about: Report privately. Never file a public issue for a vulnerability.

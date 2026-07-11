@@ -1,1 +1,231 @@
-/* Aurora UI — overlay family styles. Populated with the family module. */
+/* Aurora UI — Overlay family (dialog, alert dialog, drawer).
+ *
+ * Built on the native <dialog> element. The JS hooks call showModal()/show(),
+ * so [open] is present only while visible. Long content scrolls inside
+ * __body; the header and footer stay pinned. Tokens only. */
+
+/* ── Dialog ──────────────────────────────────────────────────────────────── */
+.aui-dialog {
+  /* The <dialog> is transparent chrome; the visible card is __box. */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--aui-text));
+  inline-size: min(92vw, 32rem);
+  max-block-size: min(85dvh, 85vh);
+  /* Native top-layer already sits above the page; z tokens documented for parity. */
+  z-index: var(--aui-z-modal);
+}
+.aui-dialog--sm { inline-size: min(92vw, 24rem); }
+.aui-dialog--md { inline-size: min(92vw, 32rem); }
+.aui-dialog--lg { inline-size: min(92vw, 44rem); }
+.aui-dialog--xl { inline-size: min(94vw, 60rem); }
+
+.aui-dialog::backdrop {
+  background: rgb(2 6 16 / 0.55);
+}
+
+.aui-dialog__box {
+  display: flex;
+  flex-direction: column;
+  max-block-size: min(85dvh, 85vh);
+  background: rgb(var(--aui-surface-overlay));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  box-shadow: var(--aui-shadow-lg);
+  overflow: hidden;
+}
+
+.aui-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aui-space-4);
+  padding: var(--aui-space-5) var(--aui-space-5) var(--aui-space-3);
+  flex: 0 0 auto;
+}
+.aui-dialog__title {
+  margin: 0;
+  font-size: var(--aui-text-lg);
+  font-weight: 600;
+  line-height: var(--aui-leading-tight);
+  color: rgb(var(--aui-text));
+  flex: 1 1 auto;
+}
+.aui-dialog__close {
+  flex: 0 0 auto;
+  margin-block-start: calc(var(--aui-space-1) * -1);
+  margin-inline-end: calc(var(--aui-space-1) * -1);
+}
+.aui-dialog__close-icon { width: 1.15em; height: 1.15em; }
+
+.aui-dialog__description {
+  margin: 0;
+  padding-inline: var(--aui-space-5);
+  color: rgb(var(--aui-text-muted));
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-normal);
+}
+/* alertdialog folds the description into the scrollable body. */
+.aui-dialog--alert .aui-dialog__body .aui-dialog__description {
+  padding-inline: 0;
+  margin-block-end: var(--aui-space-2);
+}
+
+.aui-dialog__body {
+  /* The one scroll region: controls above/below stay reachable. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--aui-space-3) var(--aui-space-5) var(--aui-space-5);
+  color: rgb(var(--aui-text));
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-normal);
+  flex: 1 1 auto;
+}
+.aui-dialog__header + .aui-dialog__body { padding-block-start: 0; }
+
+.aui-dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-4) var(--aui-space-5);
+  border-block-start: 1px solid rgb(var(--aui-border));
+  background: rgb(var(--aui-surface));
+  flex: 0 0 auto;
+}
+
+/* Enter animation — modal card and backdrop fade/rise in. */
+.aui-dialog[open] { animation: aui-dialog-in var(--aui-dur-3) var(--aui-ease-emphasized); }
+.aui-dialog[open]::backdrop { animation: aui-overlay-fade var(--aui-dur-3) var(--aui-ease-standard); }
+/* Exit — the hook adds data-aui-closing, then removes [open] after it ends. */
+.aui-dialog[data-aui-closing] { animation: aui-dialog-out var(--aui-dur-2) var(--aui-ease-exit) forwards; }
+.aui-dialog[data-aui-closing]::backdrop { animation: aui-overlay-fade var(--aui-dur-2) var(--aui-ease-exit) reverse forwards; }
+
+@keyframes aui-dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes aui-dialog-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(4px) scale(0.99); }
+}
+@keyframes aui-overlay-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Drawer ──────────────────────────────────────────────────────────────── */
+.aui-drawer {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--aui-text));
+  position: fixed;
+  z-index: var(--aui-z-modal);
+}
+.aui-drawer::backdrop { background: rgb(2 6 16 / 0.55); }
+/* Non-modal drawers are opened with show(): no backdrop, page stays live. */
+.aui-drawer[data-aui-modal="false"]::backdrop { background: transparent; }
+
+.aui-drawer__box {
+  display: flex;
+  flex-direction: column;
+  background: rgb(var(--aui-surface-overlay));
+  border: 1px solid rgb(var(--aui-border));
+  box-shadow: var(--aui-shadow-lg);
+  block-size: 100%;
+  overflow: hidden;
+}
+.aui-drawer .aui-dialog__body { flex: 1 1 auto; }
+
+/* Side placement via logical margins so start/end follow writing direction. */
+.aui-drawer--start,
+.aui-drawer--end {
+  inset-block: 0;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  inline-size: min(90vw, 22rem);
+  margin-block: 0;
+}
+.aui-drawer--start { margin-inline: 0 auto; }
+.aui-drawer--start .aui-drawer__box {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-start-end-radius: var(--aui-radius-lg);
+  border-end-end-radius: var(--aui-radius-lg);
+}
+.aui-drawer--end { margin-inline: auto 0; }
+.aui-drawer--end .aui-drawer__box {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-start-start-radius: var(--aui-radius-lg);
+  border-end-start-radius: var(--aui-radius-lg);
+}
+
+.aui-drawer--top,
+.aui-drawer--bottom {
+  inset-inline: 0;
+  inline-size: 100vw;
+  max-inline-size: 100vw;
+  block-size: auto;
+  max-block-size: 85dvh;
+  margin-inline: 0;
+}
+.aui-drawer--top { margin-block: 0 auto; }
+.aui-drawer--top .aui-drawer__box {
+  block-size: auto;
+  border-end-start-radius: var(--aui-radius-lg);
+  border-end-end-radius: var(--aui-radius-lg);
+}
+.aui-drawer--bottom { margin-block: auto 0; }
+.aui-drawer--bottom .aui-drawer__box {
+  block-size: auto;
+  border-start-start-radius: var(--aui-radius-lg);
+  border-start-end-radius: var(--aui-radius-lg);
+}
+
+/* Slide-in per side. Logical start/end resolve to physical X and flip in RTL. */
+.aui-drawer[open] { animation: aui-fade-only var(--aui-dur-2) var(--aui-ease-standard); }
+.aui-drawer[open]::backdrop { animation: aui-overlay-fade var(--aui-dur-3) var(--aui-ease-standard); }
+
+.aui-drawer--end[open] .aui-drawer__box { animation: aui-slide-from-end var(--aui-dur-3) var(--aui-ease-emphasized); }
+.aui-drawer--start[open] .aui-drawer__box { animation: aui-slide-from-start var(--aui-dur-3) var(--aui-ease-emphasized); }
+.aui-drawer--top[open] .aui-drawer__box { animation: aui-slide-from-top var(--aui-dur-3) var(--aui-ease-emphasized); }
+.aui-drawer--bottom[open] .aui-drawer__box { animation: aui-slide-from-bottom var(--aui-dur-3) var(--aui-ease-emphasized); }
+
+.aui-drawer[data-aui-closing] .aui-drawer__box { animation-direction: reverse; animation-fill-mode: forwards; }
+.aui-drawer[data-aui-closing]::backdrop { animation: aui-overlay-fade var(--aui-dur-2) var(--aui-ease-exit) reverse forwards; }
+
+@keyframes aui-fade-only { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aui-slide-from-end { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes aui-slide-from-start { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes aui-slide-from-top { from { transform: translateY(-100%); } to { transform: none; } }
+@keyframes aui-slide-from-bottom { from { transform: translateY(100%); } to { transform: none; } }
+
+/* RTL: start/end swap their physical slide direction. */
+[dir="rtl"] .aui-drawer--end[open] .aui-drawer__box { animation-name: aui-slide-from-start; }
+[dir="rtl"] .aui-drawer--start[open] .aui-drawer__box { animation-name: aui-slide-from-end; }
+
+/* ── Reduced motion — state change without large translate/scale motion. ──── */
+@media (prefers-reduced-motion: reduce) {
+  .aui-dialog[open],
+  .aui-dialog[data-aui-closing],
+  .aui-drawer[open],
+  .aui-drawer[open] .aui-drawer__box,
+  .aui-drawer[data-aui-closing] .aui-drawer__box {
+    animation: aui-overlay-fade var(--aui-dur-1) var(--aui-ease-standard);
+  }
+  .aui-dialog[data-aui-closing],
+  .aui-drawer[data-aui-closing] .aui-drawer__box {
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+  }
+}
+
+/* ── Forced colors — keep the card and separators legible. ─────────────────── */
+@media (forced-colors: active) {
+  .aui-dialog__box,
+  .aui-drawer__box { border: 1px solid CanvasText; }
+  .aui-dialog::backdrop,
+  .aui-drawer::backdrop { background: rgb(0 0 0 / 0.5); }
+}

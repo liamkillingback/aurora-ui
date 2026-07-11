@@ -1,1 +1,202 @@
-/* Aurora UI — media family styles. Populated with the family module. */
+/* Aurora UI — Media family (media, gallery, code block, prose, callout). */
+
+/* ── Aspect-ratio media ───────────────────────────────────────────────────
+   The frame reserves space via aspect-ratio before the asset loads, so the
+   image/video swap never shifts layout (no CLS). */
+.aui-media { margin: 0; display: block; }
+.aui-media__frame {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  overflow: hidden;
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-media--rounded .aui-media__frame { border-radius: var(--aui-radius-lg); }
+
+/* The child media fills the reserved box. */
+.aui-media__frame > :where(img, video, picture, svg) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.aui-media__frame--cover > :where(img, video) { object-fit: cover; }
+.aui-media__frame--contain > :where(img, video) { object-fit: contain; }
+
+.aui-media__caption {
+  margin-block-start: var(--aui-space-2);
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-muted));
+  text-align: start;
+}
+
+/* ── Gallery ──────────────────────────────────────────────────────────────
+   Auto-fitting responsive grid; items keyboard-navigable via their own links. */
+.aui-gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--aui-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--aui-gallery-min, 16rem), 100%), 1fr));
+}
+.aui-gallery > li { margin: 0; }
+
+/* ── Code block ───────────────────────────────────────────────────────────
+   pre/code with a language bar, copy button, and a scrollable region. The
+   background is a token so a class-based syntax theme can layer token colors. */
+.aui-code {
+  margin: 0;
+  background: rgb(var(--aui-surface-sunken));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  overflow: hidden;
+  color: rgb(var(--aui-text));
+}
+.aui-code__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  background: rgb(var(--aui-surface));
+  border-bottom: 1px solid rgb(var(--aui-border));
+}
+.aui-code__lang {
+  font-family: var(--aui-font-mono);
+  font-size: var(--aui-text-xs);
+  color: rgb(var(--aui-text-muted));
+  text-transform: lowercase;
+}
+.aui-code__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-1);
+  padding: var(--aui-space-1) var(--aui-space-2);
+  font: inherit;
+  font-size: var(--aui-text-xs);
+  color: rgb(var(--aui-text-muted));
+  background: transparent;
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-sm);
+  cursor: pointer;
+}
+.aui-code__copy:hover { color: rgb(var(--aui-text)); background: rgb(var(--aui-surface-sunken)); }
+.aui-code__copy-icon { display: inline-flex; }
+/* The copy hook may toggle [data-aui-copied] to reflect success. */
+.aui-code__copy[data-aui-copied] { color: rgb(var(--aui-success)); border-color: rgb(var(--aui-success)); }
+.aui-code__copy[data-aui-copied] .aui-code__copy-label::after { content: "ied"; }
+
+.aui-code__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.aui-code__pre {
+  margin: 0;
+  padding: var(--aui-space-4);
+  font-family: var(--aui-font-mono);
+  font-size: var(--aui-text-sm);
+  line-height: 1.6;
+  tab-size: 2;
+  /* Code is inherently LTR even inside an RTL UI. */
+  direction: ltr;
+  text-align: start;
+}
+.aui-code__pre code { font: inherit; color: inherit; background: none; white-space: pre; }
+
+/* ── Prose ────────────────────────────────────────────────────────────────
+   Readable measure + vertical rhythm for arbitrary rich content. */
+.aui-prose {
+  max-inline-size: var(--aui-measure);
+  color: rgb(var(--aui-text));
+  font-size: var(--aui-text-base);
+  line-height: 1.7;
+}
+.aui-prose > :first-child { margin-block-start: 0; }
+.aui-prose > :last-child { margin-block-end: 0; }
+.aui-prose :where(p, ul, ol, blockquote, pre, table, figure) {
+  margin-block: var(--aui-space-4);
+}
+.aui-prose :where(h1, h2, h3, h4) {
+  margin-block: var(--aui-space-8) var(--aui-space-3);
+  line-height: 1.25;
+  font-weight: 650;
+  text-wrap: balance;
+}
+.aui-prose :where(h1) { font-size: var(--aui-text-2xl); }
+.aui-prose :where(h2) { font-size: var(--aui-text-xl); }
+.aui-prose :where(h3) { font-size: var(--aui-text-lg); }
+.aui-prose :where(ul, ol) { padding-inline-start: var(--aui-space-6); }
+.aui-prose :where(li) { margin-block: var(--aui-space-1); }
+.aui-prose :where(a) { color: rgb(var(--aui-action)); text-underline-offset: 2px; }
+.aui-prose :where(code):not(pre code) {
+  font-family: var(--aui-font-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: rgb(var(--aui-surface-sunken));
+  border-radius: var(--aui-radius-xs);
+}
+.aui-prose :where(blockquote) {
+  padding-inline-start: var(--aui-space-4);
+  border-inline-start: 3px solid rgb(var(--aui-border-strong));
+  color: rgb(var(--aui-text-muted));
+}
+.aui-prose :where(img) { max-inline-size: 100%; height: auto; }
+
+/* ── Callout ──────────────────────────────────────────────────────────────
+   <aside> admonition with a variant tone + icon. */
+.aui-callout {
+  --_accent: var(--aui-info);
+  --_tint: var(--aui-info-subtle);
+  display: flex;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-4);
+  background: rgb(var(--_tint) / 0.6);
+  border: 1px solid rgb(var(--_accent) / 0.35);
+  border-inline-start: 3px solid rgb(var(--_accent));
+  border-radius: var(--aui-radius-md);
+  color: rgb(var(--aui-text));
+}
+.aui-callout--note { --_accent: var(--aui-info); --_tint: var(--aui-info-subtle); }
+.aui-callout--tip { --_accent: var(--aui-success); --_tint: var(--aui-success-subtle); }
+.aui-callout--warning { --_accent: var(--aui-warning); --_tint: var(--aui-warning-subtle); }
+.aui-callout--danger { --_accent: var(--aui-danger); --_tint: var(--aui-danger-subtle); }
+
+.aui-callout__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  font-size: var(--aui-text-lg);
+  color: rgb(var(--_accent));
+  line-height: 1;
+}
+.aui-callout__body { min-inline-size: 0; }
+.aui-callout__title {
+  margin: 0 0 var(--aui-space-1);
+  font-weight: 650;
+  color: rgb(var(--_accent));
+}
+.aui-callout__content > :first-child { margin-block-start: 0; }
+.aui-callout__content > :last-child { margin-block-end: 0; }
+
+/* ── Forced colors ───────────────────────────────────────────────────────*/
+@media (forced-colors: active) {
+  .aui-media__frame,
+  .aui-code,
+  .aui-callout { border: 1px solid CanvasText; }
+  .aui-callout { border-inline-start-width: 3px; }
+  .aui-callout__icon,
+  .aui-callout__title { color: CanvasText; }
+}
+
+/* ── Print ───────────────────────────────────────────────────────────────*/
+@media print {
+  .aui-code,
+  .aui-callout {
+    border: 1px solid #000;
+    background: transparent;
+    break-inside: avoid;
+  }
+  .aui-code__copy { display: none; }
+  .aui-code__scroll { overflow: visible; }
+  .aui-code__pre { white-space: pre-wrap; word-break: break-word; }
+  .aui-gallery { display: block; }
+}

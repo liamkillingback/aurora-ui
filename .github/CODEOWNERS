@@ -1,0 +1,10 @@
+# Aurora UI code owners. These owners are requested for review automatically.
+# Accessibility- and security-sensitive areas require maintainer review.
+
+*                       @liamkillingback
+
+/lib/aurora_ui/         @liamkillingback
+/assets/                @liamkillingback
+/docs/adr/              @liamkillingback
+/.github/               @liamkillingback
+/SECURITY.md            @liamkillingback

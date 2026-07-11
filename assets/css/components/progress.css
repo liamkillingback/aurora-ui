@@ -1,1 +1,157 @@
-/* Aurora UI — progress family styles. Populated with the family module. */
+/* Aurora UI — Progress family (spinner, progress, skeleton, async_state). */
+
+/* ── Spinner ────────────────────────────────────────────────────────────── */
+.aui-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  color: rgb(var(--aui-action));
+  --_spinner-size: 1.25rem;
+}
+.aui-spinner--sm { --_spinner-size: 1rem; }
+.aui-spinner--md { --_spinner-size: 1.25rem; }
+.aui-spinner--lg { --_spinner-size: 2rem; }
+
+.aui-spinner__track {
+  inline-size: var(--_spinner-size);
+  block-size: var(--_spinner-size);
+  border-radius: var(--aui-radius-full);
+  border: 2px solid rgb(var(--aui-action) / 0.25);
+  border-top-color: rgb(var(--aui-action));
+  animation: aui-spin 0.7s linear infinite;
+}
+
+/* Reduced motion: slow, don't stop — a stopped spinner reads as frozen. */
+@media (prefers-reduced-motion: reduce) {
+  .aui-spinner__track { animation-duration: 2s; }
+}
+@media (forced-colors: active) {
+  .aui-spinner__track { border-color: CanvasText; border-top-color: Highlight; }
+}
+
+/* ── Progress bar ───────────────────────────────────────────────────────── */
+.aui-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+  inline-size: 100%;
+  --_bar-height: 0.5rem;
+}
+.aui-progress--sm { --_bar-height: 0.25rem; }
+.aui-progress--md { --_bar-height: 0.5rem; }
+.aui-progress--lg { --_bar-height: 0.75rem; }
+
+.aui-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--aui-space-3);
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text));
+}
+.aui-progress__value {
+  color: rgb(var(--aui-text-muted));
+  font-variant-numeric: tabular-nums;
+}
+
+.aui-progress__track {
+  position: relative;
+  block-size: var(--_bar-height);
+  inline-size: 100%;
+  background: rgb(var(--aui-surface-sunken));
+  border-radius: var(--aui-radius-full);
+  overflow: hidden;
+}
+.aui-progress__fill {
+  block-size: 100%;
+  inline-size: 0;
+  background: rgb(var(--aui-action));
+  border-radius: inherit;
+  transition: inline-size var(--aui-dur-3) var(--aui-ease-standard);
+}
+
+/* Indeterminate: a sweeping segment. RTL-safe because it animates a translate
+   of an inset-positioned bar. */
+.aui-progress__track--indeterminate .aui-progress__fill {
+  inline-size: 40%;
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  animation: aui-progress-sweep 1.4s var(--aui-ease-standard) infinite;
+}
+
+@keyframes aui-progress-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* Reduced motion: replace the travelling sweep with a calm in-place pulse. */
+@media (prefers-reduced-motion: reduce) {
+  .aui-progress__track--indeterminate .aui-progress__fill {
+    inline-size: 100%;
+    animation: aui-progress-pulse 2s ease-in-out infinite;
+  }
+}
+@keyframes aui-progress-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+@media (forced-colors: active) {
+  .aui-progress__track { border: 1px solid CanvasText; }
+  .aui-progress__fill { background: Highlight; }
+}
+
+/* ── Skeleton ───────────────────────────────────────────────────────────── */
+.aui-skeleton {
+  display: block;
+  background: rgb(var(--aui-surface-sunken));
+  border-radius: var(--aui-radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+.aui-skeleton--text { border-radius: var(--aui-radius-full); }
+.aui-skeleton--pill { border-radius: var(--aui-radius-full); }
+.aui-skeleton--circle { border-radius: var(--aui-radius-full); }
+
+/* Shimmer via an overlay so the base box color reserves layout even if the
+   animation is disabled. */
+.aui-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--aui-surface-raised) / 0.65),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: aui-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+@keyframes aui-skeleton-shimmer {
+  100% { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-skeleton::after { animation: none; }
+}
+@media (forced-colors: active) {
+  .aui-skeleton { border: 1px solid GrayText; }
+  .aui-skeleton::after { display: none; }
+}
+
+/* ── Async state wrapper ────────────────────────────────────────────────── */
+.aui-async { display: block; }
+.aui-async__loading,
+.aui-async__empty,
+.aui-async__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-6);
+  text-align: center;
+}
+.aui-async__error {
+  color: rgb(var(--aui-danger));
+}

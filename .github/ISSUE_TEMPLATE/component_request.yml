@@ -1,0 +1,15 @@
+name: Component request
+description: Request a new component or variant.
+labels: ["component request", "needs-triage"]
+body:
+  - type: input
+    id: name
+    attributes: { label: Component name }
+    validations: { required: true }
+  - type: textarea
+    id: problem
+    attributes: { label: What problem does it solve?, description: Real task, not "because other kits have it." }
+    validations: { required: true }
+  - type: textarea
+    id: a11y
+    attributes: { label: Accessibility considerations, description: Known keyboard/ARIA/focus requirements. }

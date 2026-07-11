@@ -1,1 +1,160 @@
-/* Aurora UI — floating family styles. Populated with the family module. */
+/* Aurora UI — Floating family (menu, popover, tooltip).
+ *
+ * The hook owns positioning: collision flipping, scroll containers, zoom, and
+ * RTL are resolved at runtime and written back to data-aui-placement. CSS here
+ * only paints the panels and their default (pre-position) offset. Tokens only.
+ *
+ * The hook toggles visibility by removing [hidden] (menu, tooltip) or via the
+ * native popover top-layer (popover). Panels are absolutely/fixed positioned;
+ * the hook sets inset via inline styles once measured. */
+
+/* ── Menu ────────────────────────────────────────────────────────────────── */
+.aui-menu { position: relative; display: inline-flex; }
+
+.aui-menu__list {
+  position: absolute;
+  inset-block-start: calc(100% + var(--aui-space-2));
+  inset-inline-start: 0;
+  z-index: var(--aui-z-dropdown);
+  min-inline-size: 12rem;
+  max-inline-size: min(20rem, 92vw);
+  max-block-size: min(60vh, 24rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--aui-space-1);
+  background: rgb(var(--aui-surface-overlay));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-md);
+  box-shadow: var(--aui-shadow-lg);
+}
+.aui-menu__list[data-aui-placement$="end"] { inset-inline: auto 0; }
+
+.aui-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  inline-size: 100%;
+  min-block-size: var(--aui-control-sm);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  border: 0;
+  border-radius: var(--aui-radius-sm);
+  background: transparent;
+  color: rgb(var(--aui-text));
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  text-align: start;
+  cursor: pointer;
+}
+/* Roving focus: only one item is tabbable, but all show hover/focus feedback. */
+.aui-menu__item:hover:not([disabled]),
+.aui-menu__item:focus-visible,
+.aui-menu__item[data-aui-active] {
+  background: rgb(var(--aui-action-subtle));
+  color: rgb(var(--aui-action));
+}
+.aui-menu__item--danger { color: rgb(var(--aui-danger)); }
+.aui-menu__item--danger:hover:not([disabled]),
+.aui-menu__item--danger:focus-visible,
+.aui-menu__item--danger[data-aui-active] {
+  background: rgb(var(--aui-danger-subtle));
+  color: rgb(var(--aui-danger));
+}
+.aui-menu__item[disabled],
+.aui-menu__item[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Popover ─────────────────────────────────────────────────────────────── */
+.aui-popover-root { display: inline-flex; }
+
+.aui-popover {
+  /* Native popover renders in the top layer; the hook sets inset once measured. */
+  margin: 0;
+  position: fixed;
+  z-index: var(--aui-z-dropdown);
+  inline-size: max-content;
+  max-inline-size: min(24rem, 92vw);
+  padding: 0;
+  background: rgb(var(--aui-surface-overlay));
+  color: rgb(var(--aui-text));
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-md);
+  box-shadow: var(--aui-shadow-lg);
+}
+/* :popover-open is the native visibility signal; [hidden] fallback for the hook. */
+.aui-popover:not(:popover-open) { display: none; }
+.aui-popover__content {
+  padding: var(--aui-space-4);
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-normal);
+}
+
+.aui-popover[data-aui-placement^="top"] { transform-origin: bottom center; }
+.aui-popover[data-aui-placement^="bottom"] { transform-origin: top center; }
+
+.aui-popover:popover-open { animation: aui-pop-in var(--aui-dur-2) var(--aui-ease-emphasized); }
+
+@keyframes aui-pop-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
+.aui-tooltip-root { position: relative; display: inline-flex; }
+.aui-tooltip__trigger { display: inline-flex; }
+
+.aui-tooltip {
+  position: absolute;
+  inset-block-end: calc(100% + var(--aui-space-2));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  z-index: var(--aui-z-tooltip);
+  inline-size: max-content;
+  max-inline-size: min(18rem, 80vw);
+  padding: var(--aui-space-1) var(--aui-space-2);
+  background: rgb(var(--aui-text));
+  color: rgb(var(--aui-canvas));
+  border-radius: var(--aui-radius-sm);
+  box-shadow: var(--aui-shadow-md);
+  font-size: var(--aui-text-xs);
+  line-height: var(--aui-leading-normal);
+  text-align: center;
+  pointer-events: none;
+}
+.aui-tooltip[hidden] { display: none; }
+.aui-tooltip[data-aui-placement="bottom"] {
+  inset-block: calc(100% + var(--aui-space-2)) auto;
+}
+.aui-tooltip[data-aui-placement="start"],
+.aui-tooltip[data-aui-placement="end"] {
+  inset-block-end: auto;
+  inset-block-start: 50%;
+  inset-inline-start: auto;
+  transform: translateY(-50%);
+}
+
+.aui-tooltip:not([hidden]) { animation: aui-tip-in var(--aui-dur-1) var(--aui-ease-standard); }
+
+@keyframes aui-tip-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Reduced motion — reveal instantly, no scale/translate entrance. ──────── */
+@media (prefers-reduced-motion: reduce) {
+  .aui-popover:popover-open,
+  .aui-tooltip:not([hidden]) {
+    animation: aui-tip-in var(--aui-dur-1) var(--aui-ease-standard);
+  }
+}
+
+/* ── Forced colors — keep panel borders and tooltip contrast. ─────────────── */
+@media (forced-colors: active) {
+  .aui-menu__list,
+  .aui-popover,
+  .aui-tooltip { border: 1px solid CanvasText; }
+  .aui-tooltip { background: Canvas; color: CanvasText; }
+  .aui-menu__item[data-aui-active],
+  .aui-menu__item:focus-visible { outline: 1px solid Highlight; }
+}

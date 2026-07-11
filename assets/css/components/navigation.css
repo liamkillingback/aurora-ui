@@ -1,1 +1,501 @@
-/* Aurora UI — navigation family styles. Populated with the family module. */
+/* Aurora UI — Navigation family (navbar, sidebar, breadcrumbs, pagination, steps). */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Skip link — visually hidden until focused, then pinned to the viewport edge.
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-navbar__skip {
+  position: absolute;
+  inset-inline-start: var(--aui-space-2);
+  inset-block-start: var(--aui-space-2);
+  z-index: var(--aui-z-sticky);
+  padding: var(--aui-space-2) var(--aui-space-4);
+  background: rgb(var(--aui-surface-raised));
+  color: rgb(var(--aui-text));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+  box-shadow: var(--aui-shadow-md);
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-navbar__skip:focus,
+.aui-navbar__skip:focus-visible {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-navbar__skip {
+    transition: none;
+    transform: none;
+    clip-path: inset(50%);
+  }
+  .aui-navbar__skip:focus,
+  .aui-navbar__skip:focus-visible {
+    clip-path: none;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Navbar
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-navbar {
+  background: rgb(var(--aui-surface));
+  border-block-end: 1px solid rgb(var(--aui-border));
+}
+.aui-navbar__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-4);
+  min-height: var(--aui-control-lg);
+  padding-inline: var(--aui-space-4);
+  padding-block: var(--aui-space-2);
+}
+.aui-navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  font-weight: 650;
+  color: rgb(var(--aui-text));
+}
+.aui-navbar__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  margin-inline-start: auto;
+}
+
+/* Mobile disclosure — native <details>. */
+.aui-navbar__disclosure {
+  order: 3;
+}
+.aui-navbar__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--aui-control-md);
+  height: var(--aui-control-md);
+  border-radius: var(--aui-radius-md);
+  cursor: pointer;
+  color: rgb(var(--aui-text));
+  list-style: none;
+}
+.aui-navbar__toggle::-webkit-details-marker {
+  display: none;
+}
+.aui-navbar__toggle:hover {
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-navbar__toggle-bars,
+.aui-navbar__toggle-bars::before,
+.aui-navbar__toggle-bars::after {
+  content: "";
+  display: block;
+  width: 1.15rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: var(--aui-radius-full);
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-navbar__toggle-bars {
+  position: relative;
+}
+.aui-navbar__toggle-bars::before {
+  position: absolute;
+  inset-block-start: -6px;
+}
+.aui-navbar__toggle-bars::after {
+  position: absolute;
+  inset-block-start: 6px;
+}
+
+.aui-navbar__links {
+  list-style: none;
+  margin: 0;
+  padding: var(--aui-space-2) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-1);
+}
+.aui-navbar__link {
+  display: block;
+  padding: var(--aui-space-2) var(--aui-space-3);
+  border-radius: var(--aui-radius-md);
+  color: rgb(var(--aui-text-muted));
+  text-decoration: none;
+  font-weight: 550;
+  transition: background-color var(--aui-dur-1) var(--aui-ease-standard),
+    color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-navbar__link:hover {
+  background: rgb(var(--aui-surface-sunken));
+  color: rgb(var(--aui-text));
+}
+.aui-navbar__link[aria-current="page"] {
+  color: rgb(var(--aui-action));
+  background: rgb(var(--aui-action-subtle));
+}
+
+/* Narrow: links collapse under the toggle in a raised sheet. */
+@media (max-width: 47.99em) {
+  .aui-navbar__disclosure[open] .aui-navbar__links {
+    position: absolute;
+    inset-inline: var(--aui-space-4);
+    margin-block-start: var(--aui-space-2);
+    padding: var(--aui-space-2);
+    background: rgb(var(--aui-surface-overlay));
+    border: 1px solid rgb(var(--aui-border));
+    border-radius: var(--aui-radius-lg);
+    box-shadow: var(--aui-shadow-lg);
+    z-index: var(--aui-z-dropdown);
+  }
+  .aui-navbar__disclosure:not([open]) .aui-navbar__links {
+    display: none;
+  }
+}
+
+/* Wide: links sit inline, toggle disappears. */
+@media (min-width: 48em) {
+  .aui-navbar__toggle {
+    display: none;
+  }
+  .aui-navbar__disclosure {
+    order: 2;
+  }
+  .aui-navbar__links {
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    display: flex !important; /* override closed <details> */
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Sidebar
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-4);
+  padding: var(--aui-space-4);
+  background: rgb(var(--aui-surface));
+  border-inline-end: 1px solid rgb(var(--aui-border));
+  min-width: 12rem;
+}
+.aui-sidebar__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-1);
+}
+.aui-sidebar__heading {
+  padding-inline: var(--aui-space-3);
+  font-size: var(--aui-text-xs);
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--aui-text-subtle));
+}
+.aui-sidebar__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-1);
+}
+.aui-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  border-radius: var(--aui-radius-md);
+  color: rgb(var(--aui-text-muted));
+  text-decoration: none;
+  font-weight: 550;
+  transition: background-color var(--aui-dur-1) var(--aui-ease-standard),
+    color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-sidebar__link:hover {
+  background: rgb(var(--aui-surface-sunken));
+  color: rgb(var(--aui-text));
+}
+.aui-sidebar__link[aria-current="page"] {
+  color: rgb(var(--aui-action));
+  background: rgb(var(--aui-action-subtle));
+  font-weight: 600;
+}
+.aui-sidebar__icon {
+  display: inline-flex;
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+.aui-sidebar__icon > :where(svg) {
+  width: 100%;
+  height: 100%;
+}
+.aui-sidebar__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Collapsible group — native <details>. */
+.aui-sidebar__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-1);
+}
+.aui-sidebar__group-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-2) var(--aui-space-3);
+  border-radius: var(--aui-radius-md);
+  cursor: pointer;
+  color: rgb(var(--aui-text));
+  font-weight: 600;
+  list-style: none;
+}
+.aui-sidebar__group-trigger::-webkit-details-marker {
+  display: none;
+}
+.aui-sidebar__group-trigger:hover {
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-sidebar__group-chevron {
+  margin-inline-start: auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-sidebar__group[open] .aui-sidebar__group-chevron {
+  transform: rotate(225deg);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Breadcrumbs
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-breadcrumbs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--aui-space-1);
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-muted));
+}
+.aui-breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-1);
+  max-width: 16ch;
+}
+.aui-breadcrumbs__item + .aui-breadcrumbs__item::before {
+  content: "/";
+  color: rgb(var(--aui-text-subtle));
+  margin-inline-end: var(--aui-space-1);
+}
+.aui-breadcrumbs__link {
+  color: rgb(var(--aui-text-muted));
+  text-decoration: none;
+  border-radius: var(--aui-radius-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aui-breadcrumbs__link:hover {
+  color: rgb(var(--aui-text));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.aui-breadcrumbs__current {
+  color: rgb(var(--aui-text));
+  font-weight: 550;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Pagination
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-pagination__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--aui-space-1);
+}
+.aui-pagination__control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-1);
+  min-width: var(--aui-control-md);
+  height: var(--aui-control-md);
+  padding-inline: var(--aui-space-3);
+  border-radius: var(--aui-radius-md);
+  color: rgb(var(--aui-text-muted));
+  text-decoration: none;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--aui-dur-1) var(--aui-ease-standard),
+    color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-pagination__control:hover {
+  background: rgb(var(--aui-surface-sunken));
+  color: rgb(var(--aui-text));
+}
+.aui-pagination__control--current {
+  background: rgb(var(--aui-action));
+  color: rgb(var(--aui-text-on-action));
+  box-shadow: var(--aui-shadow-sm);
+}
+.aui-pagination__control--current:hover {
+  background: rgb(var(--aui-action));
+  color: rgb(var(--aui-text-on-action));
+}
+.aui-pagination__control--disabled {
+  color: rgb(var(--aui-text-subtle));
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.aui-pagination__gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--aui-control-md);
+  height: var(--aui-control-md);
+  color: rgb(var(--aui-text-subtle));
+}
+.aui-pagination__arrow {
+  font-size: 1.1em;
+  line-height: 1;
+}
+/* Hide the verbose prev/next label on very narrow screens; arrows remain. */
+@media (max-width: 29.99em) {
+  .aui-pagination__control-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Steps
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-steps__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--aui-space-4);
+}
+.aui-steps--vertical .aui-steps__list {
+  flex-direction: column;
+}
+.aui-steps__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aui-space-3);
+  flex: 1;
+  position: relative;
+}
+/* Connector line between markers. */
+.aui-steps--horizontal .aui-steps__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(var(--aui-control-sm) / 2);
+  inset-inline-start: calc(var(--aui-control-sm) + var(--aui-space-2));
+  inline-size: calc(100% - var(--aui-control-sm));
+  block-size: 2px;
+  background: rgb(var(--aui-border-strong));
+}
+.aui-steps--vertical .aui-steps__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--aui-control-sm);
+  inset-inline-start: calc(var(--aui-control-sm) / 2 - 1px);
+  inline-size: 2px;
+  block-size: calc(100% - var(--aui-control-sm) + var(--aui-space-4));
+  background: rgb(var(--aui-border-strong));
+}
+.aui-steps__item--complete::after {
+  background: rgb(var(--aui-action)) !important;
+}
+.aui-steps__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--aui-control-sm);
+  block-size: var(--aui-control-sm);
+  flex: none;
+  border-radius: var(--aui-radius-full);
+  border: 2px solid rgb(var(--aui-border-strong));
+  background: rgb(var(--aui-surface));
+  color: rgb(var(--aui-text-muted));
+  font-size: var(--aui-text-sm);
+  font-weight: 650;
+  z-index: 1;
+}
+.aui-steps__item--complete .aui-steps__marker {
+  background: rgb(var(--aui-action));
+  border-color: rgb(var(--aui-action));
+  color: rgb(var(--aui-text-on-action));
+}
+.aui-steps__item--current .aui-steps__marker {
+  border-color: rgb(var(--aui-action));
+  color: rgb(var(--aui-action));
+  box-shadow: 0 0 0 4px rgb(var(--aui-action-subtle));
+}
+.aui-steps__check {
+  inline-size: 0.45rem;
+  block-size: 0.7rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+}
+.aui-steps__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-1);
+  padding-block-start: calc((var(--aui-control-sm) - 1.2em) / 2);
+}
+.aui-steps__label {
+  font-weight: 600;
+  color: rgb(var(--aui-text-muted));
+}
+.aui-steps__item--current .aui-steps__label,
+.aui-steps__item--complete .aui-steps__label {
+  color: rgb(var(--aui-text));
+}
+.aui-steps__description {
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-subtle));
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Forced colors — keep current/selected states perceivable without our colors.
+   ────────────────────────────────────────────────────────────────────────── */
+@media (forced-colors: active) {
+  .aui-navbar__link[aria-current="page"],
+  .aui-sidebar__link[aria-current="page"],
+  .aui-pagination__control--current {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+  .aui-steps__item--complete .aui-steps__marker,
+  .aui-steps__item--current .aui-steps__marker {
+    border-color: Highlight;
+    color: Highlight;
+  }
+}

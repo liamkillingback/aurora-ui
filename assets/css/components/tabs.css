@@ -1,1 +1,182 @@
-/* Aurora UI — tabs family styles. Populated with the family module. */
+/* Aurora UI — Tabs family (tabs/tablist + accordion/disclosure). */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Tabs
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-4);
+}
+.aui-tabs--vertical {
+  flex-direction: row;
+}
+
+.aui-tabs__list {
+  display: flex;
+  gap: var(--aui-space-1);
+  border-block-end: 1px solid rgb(var(--aui-border));
+}
+.aui-tabs--vertical .aui-tabs__list {
+  flex-direction: column;
+  border-block-end: none;
+  border-inline-end: 1px solid rgb(var(--aui-border));
+  gap: var(--aui-space-1);
+}
+
+.aui-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-2) var(--aui-space-4);
+  min-height: var(--aui-control-md);
+  background: transparent;
+  border: none;
+  color: rgb(var(--aui-text-muted));
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+  /* Selection underline drawn with a pseudo so layout never shifts. */
+  position: relative;
+  border-radius: var(--aui-radius-sm) var(--aui-radius-sm) 0 0;
+  transition: color var(--aui-dur-1) var(--aui-ease-standard),
+    background-color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-tabs__tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--aui-space-2);
+  inset-block-end: -1px;
+  block-size: 2px;
+  background: rgb(var(--aui-action));
+  transform: scaleX(0);
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-tabs--vertical .aui-tabs__tab {
+  border-radius: var(--aui-radius-sm) 0 0 var(--aui-radius-sm);
+}
+.aui-tabs--vertical .aui-tabs__tab::after {
+  inset-inline: auto;
+  inset-inline-end: -1px;
+  inset-block: var(--aui-space-1);
+  inline-size: 2px;
+  block-size: auto;
+}
+
+.aui-tabs__tab:hover:not([disabled]) {
+  color: rgb(var(--aui-text));
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-tabs__tab[aria-selected="true"] {
+  color: rgb(var(--aui-action));
+}
+.aui-tabs__tab[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+.aui-tabs--vertical .aui-tabs__tab[aria-selected="true"]::after {
+  transform: scaleY(1);
+}
+.aui-tabs__tab[disabled] {
+  color: rgb(var(--aui-text-subtle));
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aui-tabs__panel {
+  color: rgb(var(--aui-text));
+}
+.aui-tabs__panel[hidden] {
+  display: none;
+}
+.aui-tabs--vertical .aui-tabs__panel {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aui-tabs__tab::after {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .aui-tabs__tab[aria-selected="true"] {
+    color: Highlight;
+  }
+  .aui-tabs__tab[aria-selected="true"]::after {
+    background: Highlight;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Accordion — native <details>/<summary>; hook only animates.
+   ────────────────────────────────────────────────────────────────────────── */
+.aui-accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-lg);
+  overflow: hidden;
+  background: rgb(var(--aui-surface));
+}
+.aui-accordion__item + .aui-accordion__item {
+  border-block-start: 1px solid rgb(var(--aui-border));
+}
+.aui-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-4);
+  cursor: pointer;
+  color: rgb(var(--aui-text));
+  font-weight: 600;
+  list-style: none;
+  transition: background-color var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-accordion__trigger::-webkit-details-marker {
+  display: none;
+}
+.aui-accordion__trigger:hover {
+  background: rgb(var(--aui-surface-sunken));
+}
+.aui-accordion__title {
+  flex: 1;
+  min-width: 0;
+}
+.aui-accordion__icon {
+  flex: none;
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-accordion__item[open] .aui-accordion__icon {
+  transform: rotate(225deg);
+}
+
+.aui-accordion__panel {
+  /* Baseline: instant show/hide via native <details>. The AuroraDisclosure hook
+     animates this by transitioning grid-template-rows between 0fr and 1fr. */
+  display: grid;
+  grid-template-rows: 1fr;
+}
+.aui-accordion__content {
+  min-block-size: 0;
+  padding: 0 var(--aui-space-4) var(--aui-space-4);
+  color: rgb(var(--aui-text-muted));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aui-accordion__icon,
+  .aui-accordion__panel {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .aui-accordion__item[open] .aui-accordion__trigger {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+}

@@ -1,0 +1,15 @@
+name: Accessibility issue
+description: A WCAG / keyboard / screen-reader / contrast / motion problem.
+labels: ["accessibility", "needs-triage", "priority"]
+body:
+  - type: input
+    id: component
+    attributes: { label: Component }
+    validations: { required: true }
+  - type: textarea
+    id: barrier
+    attributes: { label: The barrier, description: Who is blocked and how. Cite the WCAG SC if known. }
+    validations: { required: true }
+  - type: input
+    id: at
+    attributes: { label: AT / browser / OS, placeholder: "e.g. NVDA + Firefox on Windows 11" }

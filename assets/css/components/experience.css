@@ -1,1 +1,144 @@
-/* Aurora UI — experience family styles. Populated with the family module. */
+/* Aurora UI — Experience family.
+ *
+ * The signature motion / 3D primitives. The scroll-reveal, stagger, and
+ * spotlight styles live in `motion.css` (shared utilities); this file owns the
+ * `aui-scene` and `aui-tilt` blocks plus the `aui-anim` enter-transition
+ * classes used by the module's JS transition helpers. Tokens only, and every
+ * animation has a reduced-motion equivalent that preserves the state change.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Tilt — subtle pointer-driven 3D. The AuroraTilt hook (lazy) publishes the
+ * rotation as --aui-rx / --aui-ry and toggles [data-aui-tilt-active]. The angle
+ * ceiling comes from --aui-tilt-max (set inline from the `max_deg` attr). Tilt
+ * is additive feedback only: no content depends on it.
+ * ------------------------------------------------------------------------- */
+.aui-tilt {
+  --aui-tilt-max: 8deg;
+  transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-tilt[data-aui-tilt-active] {
+  transform: perspective(800px) rotateX(var(--aui-ry, 0deg)) rotateY(var(--aui-rx, 0deg));
+}
+
+/* Global opt-out for a subtree (e.g. a user "reduce effects" toggle). */
+[data-aui-tilt="off"] .aui-tilt,
+[data-aui-tilt="off"].aui-tilt {
+  transform: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aui-tilt,
+  .aui-tilt[data-aui-tilt-active] {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Scene host — a static, accessible shell that a Three.js scene enhances.
+ * The `__stage` holds the fallback (and later the injected <canvas>); the
+ * `__semantic` layer is always-present real content. The AuroraSceneHost hook
+ * sets [data-aui-scene-ready] only after a successful WebGL init, which fades
+ * the fallback out. Without JS / WebGL / motion, the fallback simply stays.
+ * ------------------------------------------------------------------------- */
+.aui-scene {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-3);
+}
+
+.aui-scene__stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--aui-radius-lg);
+  border: 1px solid rgb(var(--aui-border));
+  overflow: hidden;
+  isolation: isolate;
+  background: rgb(var(--aui-surface-sunken));
+}
+
+/* The hook injects the renderer canvas into the stage. */
+.aui-scene__stage > :where(canvas) {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.aui-scene__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: stretch;
+}
+.aui-scene__fallback > * {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+.aui-scene__fallback :where(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fade the static fallback away once the live scene has taken over. */
+.aui-scene[data-aui-scene-ready] .aui-scene__fallback {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--aui-dur-3) var(--aui-ease-standard);
+}
+
+.aui-scene__semantic {
+  color: rgb(var(--aui-text));
+  max-width: var(--aui-measure);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No cross-fade; the hook won't autoplay, so the fallback is the experience. */
+  .aui-scene[data-aui-scene-ready] .aui-scene__fallback {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .aui-scene__stage {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Named enter transitions — applied by the module's JS helpers (fade_in/1,
+ * slide_up/1, scale_in/1) via `phx-mounted` or JS commands. The keyframes
+ * themselves (aui-fade-in / aui-slide-up / aui-scale-in) are defined in
+ * motion.css. Reduced motion caps the duration and drops travel to a fade.
+ * ------------------------------------------------------------------------- */
+.aui-anim {
+  animation-duration: var(--aui-dur-3);
+  animation-timing-function: var(--aui-ease-standard);
+  animation-fill-mode: both;
+}
+.aui-anim--fade-in {
+  animation-name: aui-fade-in;
+}
+.aui-anim--slide-up {
+  animation-name: aui-slide-up;
+}
+.aui-anim--scale-in {
+  animation-name: aui-scale-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aui-anim {
+    animation-duration: 1ms;
+  }
+  .aui-anim--slide-up,
+  .aui-anim--scale-in {
+    animation-name: aui-fade-in;
+  }
+}

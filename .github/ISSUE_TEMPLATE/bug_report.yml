@@ -1,0 +1,37 @@
+name: Bug report
+description: Something in a component behaves incorrectly.
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for the report. Accessibility bugs are prioritized.
+  - type: input
+    id: component
+    attributes: { label: Component / family, placeholder: "e.g. Overlay.dialog" }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: What did you expect?, description: And what happened instead? }
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes: { label: Minimal reproduction, description: HEEx + steps. A repo link is ideal. }
+    validations: { required: true }
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      value: |
+        - aurora_ui:
+        - phoenix_live_view:
+        - phoenix:
+        - tailwind:
+        - elixir/otp:
+        - browser + AT (if a11y):
+    validations: { required: true }
+  - type: checkboxes
+    id: a11y
+    attributes:
+      label: Accessibility
+      options:
+        - label: This is an accessibility issue (keyboard, screen reader, contrast, focus, motion).

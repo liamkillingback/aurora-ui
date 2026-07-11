@@ -19,12 +19,12 @@ defmodule AuroraUI.MixProject do
       package: package(),
       docs: docs(),
       source_url: @source_url,
-      test_coverage: [summary: [threshold: 0]],
-      preferred_cli_env: [
-        "test.watch": :test,
-        docs: :docs
-      ]
+      test_coverage: [summary: [threshold: 0]]
     ]
+  end
+
+  def cli do
+    [preferred_envs: ["test.watch": :test, docs: :docs, check: :test]]
   end
 
   def application do

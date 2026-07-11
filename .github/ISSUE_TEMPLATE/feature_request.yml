@@ -1,0 +1,11 @@
+name: Feature request
+description: Improve the library, docs, or tooling.
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: proposal
+    attributes: { label: Proposal }
+    validations: { required: true }
+  - type: textarea
+    id: alternatives
+    attributes: { label: Alternatives considered }

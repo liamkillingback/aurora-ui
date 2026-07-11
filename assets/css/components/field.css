@@ -1,1 +1,187 @@
-/* Aurora UI — field family styles. Populated with the family module. */
+/* Aurora UI — Field family (field wrapper, input, textarea, label, help, error). */
+
+.aui-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+}
+
+/* Label ------------------------------------------------------------------- */
+.aui-field__label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--aui-space-1);
+  font-size: var(--aui-text-sm);
+  font-weight: 550;
+  line-height: var(--aui-leading-tight);
+  color: rgb(var(--aui-text));
+}
+.aui-field__required {
+  color: rgb(var(--aui-danger));
+  font-weight: 600;
+}
+.aui-field__optional {
+  color: rgb(var(--aui-text-subtle));
+  font-weight: 400;
+  font-size: var(--aui-text-xs);
+}
+
+/* Control block (control + meta) ------------------------------------------ */
+.aui-field__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+}
+
+/* The visible control box that holds affixes and the input. */
+.aui-field__control {
+  display: flex;
+  align-items: stretch;
+  gap: var(--aui-space-2);
+  min-height: var(--aui-control-md);
+  padding-inline: var(--aui-space-3);
+  background: rgb(var(--aui-surface));
+  color: rgb(var(--aui-text));
+  border: 1px solid rgb(var(--aui-border-strong));
+  border-radius: var(--aui-radius-md);
+  transition:
+    border-color var(--aui-dur-1) var(--aui-ease-standard),
+    background-color var(--aui-dur-1) var(--aui-ease-standard),
+    box-shadow var(--aui-dur-1) var(--aui-ease-standard);
+}
+.aui-field__control--multiline {
+  min-height: auto;
+  padding-block: var(--aui-space-1);
+  align-items: stretch;
+}
+
+/* Hover (only when interactive). */
+.aui-field__control:hover:not([data-disabled]):not([data-readonly]) {
+  border-color: rgb(var(--aui-text-subtle));
+}
+
+/* Focus — the ring is owned by the input via .aui-focusable / the base rule;
+   here we only tint the container border so affixes read as one control. */
+.aui-field__control:focus-within {
+  border-color: rgb(var(--aui-action));
+}
+
+/* Invalid. */
+.aui-field__control[data-invalid] {
+  border-color: rgb(var(--aui-danger));
+}
+.aui-field__control[data-invalid]:focus-within {
+  border-color: rgb(var(--aui-danger));
+}
+
+/* Disabled / readonly. */
+.aui-field__control[data-disabled] {
+  background: rgb(var(--aui-surface-sunken));
+  border-color: rgb(var(--aui-border));
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.aui-field__control[data-readonly] {
+  background: rgb(var(--aui-surface-sunken));
+}
+
+/* The actual control ------------------------------------------------------ */
+.aui-field__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  padding-block: var(--aui-space-2);
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-normal);
+  border-radius: var(--aui-radius-sm);
+}
+.aui-field__input::placeholder {
+  color: rgb(var(--aui-text-subtle));
+  opacity: 1;
+}
+.aui-field__input:disabled {
+  cursor: not-allowed;
+  color: rgb(var(--aui-text-muted));
+  -webkit-text-fill-color: rgb(var(--aui-text-muted)); /* Safari keeps disabled ink legible */
+}
+.aui-field__textarea {
+  resize: vertical;
+  min-height: calc(var(--aui-control-md) * 1.4);
+}
+.aui-field__textarea[data-aui-autosize] {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Affixes (prefix / suffix) ---------------------------------------------- */
+.aui-field__affix {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: rgb(var(--aui-text-muted));
+  font-size: var(--aui-text-sm);
+  white-space: nowrap;
+  user-select: none;
+}
+.aui-field__affix > :where(svg) {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* Meta row (help / error / count) ---------------------------------------- */
+.aui-field__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--aui-space-2);
+}
+.aui-field__help {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: var(--aui-text-xs);
+  line-height: var(--aui-leading-normal);
+  color: rgb(var(--aui-text-muted));
+}
+.aui-field__error {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: var(--aui-text-xs);
+  line-height: var(--aui-leading-normal);
+  color: rgb(var(--aui-danger));
+  font-weight: 550;
+}
+.aui-field__count {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  font-size: var(--aui-text-xs);
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--aui-text-subtle));
+}
+
+/* Forced colors — keep the box border as the structural cue. */
+@media (forced-colors: active) {
+  .aui-field__control {
+    border-color: CanvasText;
+  }
+  .aui-field__control:focus-within {
+    border-color: Highlight;
+  }
+  .aui-field__control[data-invalid] {
+    border-color: LinkText;
+  }
+}
+
+/* Reduced motion — transitions are already token-driven and gated globally,
+   but drop the local border transition to a state swap for safety. */
+@media (prefers-reduced-motion: reduce) {
+  .aui-field__control {
+    transition: none;
+  }
+}

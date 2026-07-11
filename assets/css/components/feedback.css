@@ -1,1 +1,376 @@
-/* Aurora UI — feedback family styles. Populated with the family module. */
+/* Aurora UI — Feedback family (alert, toast + region, inline status, connection state). */
+
+/* ── Alert ──────────────────────────────────────────────────────────────── */
+.aui-alert {
+  --_accent: var(--aui-info);
+  --_bg: var(--aui-info-subtle);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-3) var(--aui-space-4);
+  border: 1px solid rgb(var(--_accent) / 0.35);
+  border-inline-start: 3px solid rgb(var(--_accent));
+  border-radius: var(--aui-radius-md);
+  background: rgb(var(--_bg));
+  color: rgb(var(--aui-text));
+}
+.aui-alert--info {
+  --_accent: var(--aui-info);
+  --_bg: var(--aui-info-subtle);
+}
+.aui-alert--success {
+  --_accent: var(--aui-success);
+  --_bg: var(--aui-success-subtle);
+}
+.aui-alert--warning {
+  --_accent: var(--aui-warning);
+  --_bg: var(--aui-warning-subtle);
+}
+.aui-alert--danger {
+  --_accent: var(--aui-danger);
+  --_bg: var(--aui-danger-subtle);
+}
+.aui-alert--neutral {
+  --_accent: var(--aui-border-strong);
+  --_bg: var(--aui-surface-sunken);
+}
+
+.aui-alert__icon {
+  display: inline-flex;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-block-start: 0.05rem;
+  color: rgb(var(--_accent));
+}
+.aui-alert__icon > :where(svg) {
+  width: 100%;
+  height: 100%;
+}
+.aui-alert__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.aui-alert__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-tight);
+}
+.aui-alert__body {
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-muted));
+}
+.aui-alert__title + .aui-alert__body {
+  margin-block-start: var(--aui-space-1);
+}
+
+.aui-alert__dismiss,
+.aui-toast__dismiss,
+.aui-badge__remove {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  border-radius: var(--aui-radius-sm);
+  opacity: 0.7;
+  font-size: 1.1em;
+  line-height: 1;
+}
+.aui-alert__dismiss:hover,
+.aui-toast__dismiss:hover,
+.aui-badge__remove:hover {
+  opacity: 1;
+}
+.aui-alert__dismiss,
+.aui-toast__dismiss {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ── Toast region + toast ───────────────────────────────────────────────── */
+.aui-toast-region {
+  position: fixed;
+  inset-block-end: var(--aui-space-4);
+  inset-inline-end: var(--aui-space-4);
+  z-index: var(--aui-z-toast);
+  display: flex;
+  max-width: min(100vw - 2 * var(--aui-space-4), 24rem);
+  pointer-events: none;
+}
+.aui-toast-region__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aui-space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aui-toast {
+  --_accent: var(--aui-info);
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aui-space-3);
+  padding: var(--aui-space-3) var(--aui-space-4);
+  border: 1px solid rgb(var(--aui-border));
+  border-inline-start: 3px solid rgb(var(--_accent));
+  border-radius: var(--aui-radius-md);
+  background: rgb(var(--aui-surface-overlay));
+  color: rgb(var(--aui-text));
+  box-shadow: var(--aui-shadow-lg);
+  animation: aui-toast-in var(--aui-dur-3) var(--aui-ease-emphasized);
+}
+.aui-toast--info {
+  --_accent: var(--aui-info);
+}
+.aui-toast--success {
+  --_accent: var(--aui-success);
+}
+.aui-toast--warning {
+  --_accent: var(--aui-warning);
+}
+.aui-toast--danger {
+  --_accent: var(--aui-danger);
+}
+.aui-toast--neutral {
+  --_accent: var(--aui-border-strong);
+}
+
+/* The hook flips this attribute when a timer expires or dismiss is pressed. */
+.aui-toast[data-aui-leaving="true"] {
+  animation: aui-toast-out var(--aui-dur-2) var(--aui-ease-exit) forwards;
+}
+
+.aui-toast__icon {
+  display: inline-flex;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-block-start: 0.05rem;
+  color: rgb(var(--_accent));
+}
+.aui-toast__icon > :where(svg) {
+  width: 100%;
+  height: 100%;
+}
+.aui-toast__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.aui-toast__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--aui-text-sm);
+  line-height: var(--aui-leading-tight);
+}
+.aui-toast__body {
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text-muted));
+}
+.aui-toast__title + .aui-toast__body {
+  margin-block-start: var(--aui-space-1);
+}
+.aui-toast__actions {
+  margin-block-start: var(--aui-space-2);
+  display: flex;
+  gap: var(--aui-space-2);
+}
+
+@keyframes aui-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--aui-distance-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes aui-toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(var(--aui-distance-sm));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-toast {
+    animation: aui-toast-fade var(--aui-dur-1) var(--aui-ease-standard);
+  }
+  .aui-toast[data-aui-leaving="true"] {
+    animation: none;
+    opacity: 0;
+  }
+  @keyframes aui-toast-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ── Inline status ──────────────────────────────────────────────────────── */
+.aui-status {
+  --_dot: var(--aui-text-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text));
+  line-height: var(--aui-leading-tight);
+}
+.aui-status--neutral {
+  --_dot: var(--aui-text-subtle);
+}
+.aui-status--info {
+  --_dot: var(--aui-info);
+}
+.aui-status--success {
+  --_dot: var(--aui-success);
+}
+.aui-status--warning {
+  --_dot: var(--aui-warning);
+}
+.aui-status--danger {
+  --_dot: var(--aui-danger);
+}
+.aui-status__dot {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: var(--aui-radius-full);
+  background: rgb(var(--_dot));
+}
+.aui-status--pulse .aui-status__dot {
+  position: relative;
+}
+.aui-status--pulse .aui-status__dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(var(--_dot));
+  animation: aui-status-pulse 1.8s var(--aui-ease-standard) infinite;
+}
+@keyframes aui-status-pulse {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-status--pulse .aui-status__dot::after {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  .aui-status__dot {
+    background: CanvasText;
+  }
+}
+
+/* ── Connection state ───────────────────────────────────────────────────── */
+.aui-conn {
+  --_dot: var(--aui-success);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aui-space-2);
+  padding: var(--aui-space-1) var(--aui-space-3);
+  border: 1px solid rgb(var(--aui-border));
+  border-radius: var(--aui-radius-full);
+  background: rgb(var(--aui-surface));
+  font-size: var(--aui-text-sm);
+  color: rgb(var(--aui-text));
+  line-height: var(--aui-leading-tight);
+}
+.aui-conn__dot {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--aui-radius-full);
+  background: rgb(var(--_dot));
+}
+.aui-conn[data-aui-conn="connected"] {
+  --_dot: var(--aui-success);
+}
+.aui-conn[data-aui-conn="connecting"] {
+  --_dot: var(--aui-warning);
+}
+.aui-conn[data-aui-conn="disconnected"] {
+  --_dot: var(--aui-danger);
+}
+
+/* Only the label matching the current socket state is shown. */
+.aui-conn__label {
+  display: none;
+  align-items: center;
+  gap: var(--aui-space-2);
+}
+.aui-conn[data-aui-conn="connected"] .aui-conn__label--connected,
+.aui-conn[data-aui-conn="connecting"] .aui-conn__label--connecting,
+.aui-conn[data-aui-conn="disconnected"] .aui-conn__label--disconnected {
+  display: inline-flex;
+}
+
+/* Cooperate with Phoenix's own body classes as a fallback signal. */
+.phx-loading .aui-conn__label--connected,
+.phx-error .aui-conn__label--connected {
+  display: none;
+}
+
+/* Auto-hide while healthy: collapse to nothing until the socket drops. */
+.aui-conn--auto-hide[data-aui-conn="connected"] {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--aui-dur-2) var(--aui-ease-standard);
+}
+.aui-conn--auto-hide[data-aui-conn="connecting"],
+.aui-conn--auto-hide[data-aui-conn="disconnected"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.aui-conn__spinner {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--aui-radius-full);
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: aui-spin 0.7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aui-conn__spinner {
+    animation-duration: 1.4s;
+  }
+  .aui-conn--auto-hide[data-aui-conn="connected"] {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .aui-conn__dot {
+    background: CanvasText;
+  }
+  .aui-conn--auto-hide[data-aui-conn="connected"] {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes aui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
