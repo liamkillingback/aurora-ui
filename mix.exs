@@ -24,7 +24,7 @@ defmodule AuroraUI.MixProject do
   end
 
   def cli do
-    [preferred_envs: ["test.watch": :test, docs: :docs, check: :test]]
+    [preferred_envs: ["test.watch": :test, check: :test]]
   end
 
   def application do
@@ -45,11 +45,13 @@ defmodule AuroraUI.MixProject do
       {:phoenix_html, "~> 3.3 or ~> 4.0"},
 
       # Docs / dev / test tooling only — never shipped to consumers.
-      {:jason, "~> 1.2", only: [:dev, :test, :docs]},
+      # ex_doc must be available in :dev so `mix hex.publish` (which runs in the
+      # dev env and invokes the `docs` task) can build the documentation.
+      {:jason, "~> 1.2", only: [:dev, :test]},
       {:floki, ">= 0.30.0", only: :test},
-      {:ex_doc, "~> 0.31", only: :docs, runtime: false},
-      {:makeup_elixir, "~> 0.16", only: :docs, runtime: false},
-      {:makeup_eex, "~> 0.1", only: :docs, runtime: false}
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:makeup_elixir, "~> 0.16", only: :dev, runtime: false},
+      {:makeup_eex, "~> 0.1", only: :dev, runtime: false}
     ]
   end
 
@@ -76,7 +78,23 @@ defmodule AuroraUI.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "CHANGELOG.md", "docs/accessibility.md"],
+      extras: [
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE",
+        "NOTICE.md",
+        "docs/getting-started.md",
+        "docs/tokens.md",
+        "docs/motion.md",
+        "docs/accessibility.md",
+        "docs/liveview.md",
+        "docs/compatibility.md",
+        "docs/upgrade.md",
+        "docs/troubleshooting.md"
+      ],
+      groups_for_extras: [
+        Guides: ~r/docs\/.?/
+      ],
       source_ref: "v#{@version}",
       formatters: ["html"]
     ]
