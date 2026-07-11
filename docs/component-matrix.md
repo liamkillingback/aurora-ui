@@ -25,7 +25,7 @@ offline/reconnecting. "Docs page" is the ExDoc module page (the `@moduledoc` /
 ## 1. Actions — `AuroraUI.Components.Actions`
 
 Docs: [`actions.ex`](../lib/aurora_ui/components/actions.ex) · Test:
-`test/aurora_ui/actions_test.exs` *(planned)*
+`test/aurora_ui/actions_test.exs`
 
 | Component | Key variants | States covered | Keyboard / touch | ARIA / semantic notes |
 |---|---|---|---|---|
@@ -51,7 +51,7 @@ Docs: [`field.ex`](../lib/aurora_ui/components/field.ex) · Test:
 ## 3. Choices — `AuroraUI.Components.Choices`
 
 Docs: [`choices.ex`](../lib/aurora_ui/components/choices.ex) · Test:
-`test/aurora_ui/choices_test.exs` *(planned)*
+`test/aurora_ui/choices_test.exs`
 
 | Component | Key variants | States covered | Keyboard / touch | ARIA / semantic notes |
 |---|---|---|---|---|
@@ -66,7 +66,7 @@ Docs: [`choices.ex`](../lib/aurora_ui/components/choices.ex) · Test:
 ## 4. Selection — `AuroraUI.Components.Selection`
 
 Docs: [`selection.ex`](../lib/aurora_ui/components/selection.ex) · Test:
-`test/aurora_ui/selection_test.exs` *(planned)*
+`test/aurora_ui/selection_test.exs`
 
 | Component | Key variants | States covered | Keyboard / touch | ARIA / semantic notes |
 |---|---|---|---|---|
