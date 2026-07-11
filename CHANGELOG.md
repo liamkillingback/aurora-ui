@@ -11,6 +11,39 @@ and the registered JavaScript hook names/DOM contract. Internal modules
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-07-11
+
+Interaction and layout fixes found in a full visual/interaction QA pass of the
+component lab. All are backward compatible.
+
+### Fixed
+
+- **Overlays now open from a trigger.** `dialog`, `alert_dialog`, and `drawer`
+  are opened by toggling `data-aui-open` with `Phoenix.LiveView.JS.set_attribute`
+  — a client-side change that never fires the hook's `updated()`. The hooks now
+  observe the attribute (`MutationObserver`), so triggers work. The drawer also
+  calls the native `show()`/`showModal()` so the `<dialog>` actually renders
+  (and a modal drawer regains its backdrop, top layer, and inert background).
+- **Dialog is centered.** Consumer resets (e.g. Tailwind Preflight's
+  `dialog { margin: 0 }`) clobbered the UA's centering and pinned the modal to
+  the top-left; `.aui-dialog` now owns `margin: auto`.
+- **Tooltip renders.** The `AuroraTooltip` hook was mounted on the tooltip root
+  wrapper and hid it (trigger included). The hook now lives on the bubble, so the
+  trigger stays visible and the bubble shows on hover/focus.
+- **Popover opens.** The panel carries the native `popover` attribute (CSS shows
+  it via `:popover-open`), but the hook toggled `hidden` and never called
+  `showPopover()`. It now uses the native popover API (`popover="manual"`, hook
+  owns dismissal).
+- **Command palette opens from its button.** `mountCommandPalette` never wired
+  the visible trigger's click (only the ⌘K shortcut). It now does. The listbox
+  gained the `data-aui-command-list` marker the hook queries for.
+- **Combobox hook activates.** `phx-hook="AuroraCombobox"` moved from the
+  `<input>` to the root container (where `mountCombobox` looks for the input and
+  list); added the `data-aui-combobox-input`/`-list` markers.
+- **Gallery is a grid again.** `gallery` claims `inline-size: 100%` so its
+  auto-fill grid gets real column space inside flex/inline parents instead of
+  collapsing to one column.
+
 ## [0.1.0] — 2026-07-11
 
 Initial public release.
@@ -38,5 +71,6 @@ Initial public release.
   support/compatibility policy, third-party notices, and architecture decision
   records.
 
-[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/liamkillingback/aurora-ui/releases/tag/v0.1.0

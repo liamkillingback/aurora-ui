@@ -98,6 +98,7 @@ defmodule DemoWeb.Families.Selection do
         title="Combobox"
         description="An ARIA autocomplete. HEEx renders the full listbox skeleton; the AuroraCombobox hook adds keyboard/pointer behavior. Shown open with options."
         code={@code.combobox}
+        preview_class="demo-preview-dropdown"
       >
         <div style="width:100%;max-width:22rem;">
           <.combobox
@@ -134,6 +135,7 @@ defmodule DemoWeb.Families.Selection do
         title="Combobox — no results"
         description="With no options and not loading, the listbox shows the empty_label row."
         code={@code.combobox_empty}
+        preview_class="demo-preview-dropdown"
       >
         <div style="width:100%;max-width:22rem;">
           <.combobox

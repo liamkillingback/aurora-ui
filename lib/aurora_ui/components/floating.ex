@@ -181,7 +181,6 @@ defmodule AuroraUI.Components.Floating do
           "aui-btn--#{@variant}",
           "aui-btn--#{@size}"
         ]}
-        popovertarget={@panel_id}
         aria-haspopup="dialog"
         aria-expanded="false"
         aria-controls={@panel_id}
@@ -194,7 +193,7 @@ defmodule AuroraUI.Components.Floating do
         id={@panel_id}
         class="aui-popover"
         role="dialog"
-        popover="auto"
+        popover="manual"
         aria-label={@label}
         phx-hook="AuroraPopover"
         data-aui
@@ -248,7 +247,7 @@ defmodule AuroraUI.Components.Floating do
       |> assign(:tip_id, id(base, "tip"))
 
     ~H"""
-    <span id={@id} class="aui-tooltip-root" phx-hook="AuroraTooltip" data-aui {@rest}>
+    <span id={@id} class="aui-tooltip-root" data-aui {@rest}>
       <span class="aui-tooltip__trigger" aria-describedby={@tip_id} data-aui-tooltip-trigger>
         {render_slot(@inner_block)}
       </span>
@@ -256,6 +255,7 @@ defmodule AuroraUI.Components.Floating do
         id={@tip_id}
         class="aui-tooltip"
         role="tooltip"
+        phx-hook="AuroraTooltip"
         data-aui-tooltip
         data-aui-anchor={@id}
         data-aui-placement={@placement}

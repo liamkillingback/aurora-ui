@@ -35,6 +35,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  /* A gallery is a full-width block layout; claim the width so the auto-fill
+     grid gets real column space even inside a flex/inline parent (otherwise it
+     collapses to a single content-sized column). */
+  inline-size: 100%;
   display: grid;
   gap: var(--aui-space-4);
   grid-template-columns: repeat(auto-fill, minmax(min(var(--aui-gallery-min, 16rem), 100%), 1fr));

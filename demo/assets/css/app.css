@@ -1152,3 +1152,10 @@
 .lab-scene-wrap .aui-scene { gap: 0; }
 .lab-scene-wrap .aui-scene__semantic { max-width: none; }
 .lab-scene-wrap .aui-scene__stage { border-radius: 0; border-inline: 0; border-block-start: 0; }
+
+/* Lab: reserve vertical space under a statically-open combobox so its absolute
+   listbox doesn't overlap the code panel below. Real apps float it over content. */
+.demo-story__preview.demo-preview-dropdown {
+  align-items: flex-start;
+  padding-bottom: 11rem;
+}

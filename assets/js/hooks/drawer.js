@@ -60,6 +60,11 @@ export const Drawer = {
       this.el.addEventListener("mousedown", this._onScrimClick)
     }
 
+    // A trigger toggles `data-aui-open` with `JS.set_attribute` (a client-side
+    // change that never fires `updated()`), so observe the attribute directly.
+    this._obs = new MutationObserver(() => this._syncFromDom(false))
+    this._obs.observe(this.el, { attributes: true, attributeFilter: ["data-aui-open"] })
+
     this._syncFromDom(true)
   },
 
@@ -69,6 +74,7 @@ export const Drawer = {
 
   destroyed() {
     if (!this._aui) return
+    if (this._obs) this._obs.disconnect()
     this.el.removeEventListener("keydown", this._onKeydown)
     this.el.removeEventListener("click", this._onClick)
     if (this._onScrimClick) this.el.removeEventListener("mousedown", this._onScrimClick)
@@ -96,6 +102,15 @@ export const Drawer = {
     }
 
     this.el.hidden = false
+    // Actually put the native <dialog> on screen. Without show()/showModal() the
+    // UA keeps `dialog:not([open])` at display:none, so the drawer never appears;
+    // showModal() also gives a modal drawer its backdrop, top layer, and inert
+    // background. The slide is driven by [data-state] below.
+    if (this._modal) {
+      if (typeof this.el.showModal === "function" && !this.el.open) this.el.showModal()
+    } else if (typeof this.el.show === "function" && !this.el.open) {
+      this.el.show()
+    }
     // Guard against double-acquire when reopening mid-close (the previous close's
     // lock/trap are still held because its release was cancelled above).
     if (this._modal && !this._aui.locked) {
@@ -135,6 +150,9 @@ export const Drawer = {
     // is still visible while it slides away.
     this._aui.cancelAnim = afterTransition(panel, () => {
       this._aui && (this._aui.cancelAnim = null)
+      // Close the native dialog after the slide-out so it leaves the top layer
+      // and the UA hides it; keep `hidden` as a belt-and-braces fallback.
+      if (this.el.open && typeof this.el.close === "function") this.el.close()
       this.el.hidden = true
       this._release()
     })

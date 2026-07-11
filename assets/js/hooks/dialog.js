@@ -54,16 +54,23 @@ export const Dialog = {
     }
     this.el.addEventListener("click", this._onClick)
 
+    // Open/close is driven by the `data-aui-open` attribute. A trigger toggles it
+    // with `Phoenix.LiveView.JS.set_attribute`, which is a client-side DOM change
+    // that never fires `updated()` — so observe the attribute directly.
+    this._obs = new MutationObserver(() => this._syncFromDom())
+    this._obs.observe(this.el, { attributes: true, attributeFilter: ["data-aui-open"] })
+
     this._syncFromDom()
   },
 
   updated() {
-    // Reflect server-driven open/close without dropping state.
+    // Reflect server-driven open/close (LiveView patches) without dropping state.
     this._syncFromDom()
   },
 
   destroyed() {
     if (!this._aui) return
+    if (this._obs) this._obs.disconnect()
     document.removeEventListener("focusin", this._onFocusIn, true)
     this.el.removeEventListener("cancel", this._onCancel)
     this.el.removeEventListener("close", this._onClose)

@@ -51,8 +51,12 @@ defmodule DemoWeb.NimbusLive do
     {:noreply, assign(socket, :show_new, socket.assigns.live_action == :new)}
   end
 
-  # ── Table: sorting & selection ─────────────────────────────────────────────
+  # Aurora command-palette / combobox hooks push aui:* events; this demo drives
+  # the palette purely client-side, so accept and ignore them.
   @impl true
+  def handle_event("aui:" <> _, _params, socket), do: {:noreply, socket}
+
+  # ── Table: sorting & selection ─────────────────────────────────────────────
   def handle_event("sort", %{"key" => key}, socket) do
     {sort_by, sort_dir} = toggle_sort(socket.assigns.sort_by, socket.assigns.sort_dir, key)
     {:noreply, socket |> assign(sort_by: sort_by, sort_dir: sort_dir) |> recompute()}

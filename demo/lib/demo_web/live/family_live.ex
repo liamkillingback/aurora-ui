@@ -16,6 +16,12 @@ defmodule DemoWeb.FamilyLive do
   @impl true
   def mount(_params, _session, socket), do: {:ok, socket}
 
+  # The command palette and combobox hooks push server events (aui:command:*,
+  # aui:combobox:*) so a real app can filter/act on the server. The lab shows
+  # them statically, so we accept and ignore those events rather than crash.
+  @impl true
+  def handle_event("aui:" <> _, _params, socket), do: {:noreply, socket}
+
   @impl true
   def handle_params(%{"family" => slug}, _uri, socket) do
     case Nav.family(slug) do

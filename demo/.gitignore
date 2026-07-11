@@ -35,3 +35,7 @@ demo-*.tar
 npm-debug.log
 /assets/node_modules/
 
+
+# Local visual-QA artifacts (screenshots + driver scripts)
+/qa/
+/assets/qa-*.mjs

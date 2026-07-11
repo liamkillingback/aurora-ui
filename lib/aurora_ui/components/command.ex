@@ -358,7 +358,13 @@ defmodule AuroraUI.Components.Command do
             Tip: press <kbd class="aui-command__kbd">{@shortcut}</kbd> to open this anywhere.
           </div>
 
-          <ul id={@list_id} class="aui-command__list" role="listbox" aria-label={@label}>
+          <ul
+            id={@list_id}
+            class="aui-command__list"
+            role="listbox"
+            aria-label={@label}
+            data-aui-command-list
+          >
             <li
               :for={group <- @group}
               class="aui-command__group"

@@ -69,9 +69,9 @@ defmodule AuroraUI.Components.FloatingTest do
         </Floating.popover>
         """)
 
-      # native popover baseline
-      assert out =~ ~s(popover="auto")
-      assert out =~ ~s(popovertarget="acct-panel")
+      # native popover top-layer baseline. `manual` so the hook owns dismissal
+      # (and calls showPopover()/hidePopover() to match the :popover-open CSS).
+      assert out =~ ~s(popover="manual")
       assert out =~ ~s(id="acct-panel")
 
       # hook + positioning contract

@@ -404,6 +404,21 @@ export function mountCommandPalette(hook) {
   }
   el.addEventListener("keydown", onKeydown)
 
+  // Wire the visible trigger button. It lives OUTSIDE the palette element (a
+  // sibling in the `.aui-command` root) and is linked by aria-controls, so find
+  // it there. Without this, only the Cmd/Ctrl-K shortcut could open the palette.
+  const trigger =
+    document.querySelector(`[data-aui-command-open][aria-controls="${CSS.escape(el.id)}"]`) ||
+    (el.closest("[data-aui='command']") || el.parentElement || document).querySelector(
+      "[data-aui-command-open]"
+    )
+  const onTriggerClick = (e) => {
+    e.preventDefault()
+    el.hasAttribute("data-aui-open") ? closePalette() : openPalette()
+    if (trigger) trigger.setAttribute("aria-expanded", String(el.hasAttribute("data-aui-open")))
+  }
+  if (trigger) trigger.addEventListener("click", onTriggerClick)
+
   const onDocPointer = (e) => {
     if (!el.hasAttribute("data-aui-open")) return
     const panel = el.querySelector("[data-aui-command-panel]") || list.parentElement || el
@@ -428,6 +443,7 @@ export function mountCommandPalette(hook) {
   return () => {
     controller.destroy()
     if (shortcut) document.removeEventListener("keydown", onGlobalKey)
+    if (trigger) trigger.removeEventListener("click", onTriggerClick)
     el.removeEventListener("keydown", onKeydown)
     document.removeEventListener("pointerdown", onDocPointer, true)
     if (releaseTrap) releaseTrap()

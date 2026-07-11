@@ -13,6 +13,11 @@
   color: rgb(var(--aui-text));
   inline-size: min(92vw, 32rem);
   max-block-size: min(85dvh, 85vh);
+  /* Center the modal in the viewport. The native <dialog>:modal UA rule uses
+     `margin: auto` for this, but consumer resets (e.g. Tailwind Preflight's
+     `dialog { margin: 0 }`) clobber it and pin the dialog to the top-left — so
+     we own the centering explicitly. */
+  margin: auto;
   /* Native top-layer already sits above the page; z tokens documented for parity. */
   z-index: var(--aui-z-modal);
 }

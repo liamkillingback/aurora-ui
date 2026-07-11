@@ -48,14 +48,15 @@ defmodule DemoWeb.Story do
   copyable source. See the module doc for the full example.
   """
   def story(assigns) do
-    assigns =
-      assign_new(assigns, :id, fn ->
-        "story-" <>
-          (assigns.title
-           |> String.downcase()
-           |> String.replace(~r/[^a-z0-9]+/, "-")
-           |> String.trim("-"))
-      end)
+    # `attr :id` defaults to nil, so the key is always present and `assign_new`
+    # would never fire — derive the id from the title when the caller omits it.
+    slug =
+      assigns.title
+      |> String.downcase()
+      |> String.replace(~r/[^a-z0-9]+/, "-")
+      |> String.trim("-")
+
+    assigns = assign(assigns, :id, assigns.id || "story-#{slug}")
 
     ~H"""
     <section id={@id} class="demo-story" {@rest}>

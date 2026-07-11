@@ -183,6 +183,7 @@ defmodule AuroraUI.Components.Selection do
     assigns =
       assign(assigns,
         id: id,
+        root_id: "#{id}-root",
         listbox_id: "#{id}-listbox",
         norm_options: normalize_options(assigns.options),
         empty?: assigns.option == [] and assigns.options == []
@@ -190,6 +191,7 @@ defmodule AuroraUI.Components.Selection do
 
     ~H"""
     <div
+      id={@root_id}
       class={
         cx([
           "aui-combobox",
@@ -198,6 +200,7 @@ defmodule AuroraUI.Components.Selection do
         ])
       }
       data-aui-combobox
+      phx-hook="AuroraCombobox"
     >
       <label :if={@label} for={@id} class="aui-combobox__label">{@label}</label>
       <div class="aui-combobox__control">
@@ -217,7 +220,7 @@ defmodule AuroraUI.Components.Selection do
           aria-autocomplete="list"
           aria-invalid={@invalid && "true"}
           aria-busy={@loading && "true"}
-          phx-hook="AuroraCombobox"
+          data-aui-combobox-input
           {@rest}
         />
         <span :if={@loading} class="aui-combobox__spinner" aria-hidden="true"></span>
@@ -243,6 +246,7 @@ defmodule AuroraUI.Components.Selection do
         id={@listbox_id}
         role="listbox"
         class="aui-combobox__listbox"
+        data-aui-combobox-list
         aria-label={@label || "Suggestions"}
         hidden={not @open}
       >

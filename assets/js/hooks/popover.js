@@ -81,7 +81,15 @@ export const Popover = {
   open() {
     if (this._aui.open) return
     this._aui.open = true
-    this.el.hidden = false
+    // The panel carries the native `popover` attribute, so it lives in the top
+    // layer and the CSS shows it via :popover-open — use the platform API rather
+    // than toggling `hidden` (which the UA's `[popover]:not(:popover-open)` rule
+    // ignores). `manual` popover means WE own dismissal (click-away/Escape below).
+    if (this.el.showPopover && !this.el.matches(":popover-open")) {
+      try { this.el.showPopover() } catch (_e) { this.el.hidden = false }
+    } else {
+      this.el.hidden = false
+    }
     this.el.setAttribute("data-aui-open", "")
     this._reposition()
 
@@ -101,7 +109,11 @@ export const Popover = {
   close() {
     if (!this._aui.open) return
     this._aui.open = false
-    this.el.hidden = true
+    if (this.el.hidePopover && this.el.matches(":popover-open")) {
+      try { this.el.hidePopover() } catch (_e) { this.el.hidden = true }
+    } else {
+      this.el.hidden = true
+    }
     this.el.removeAttribute("data-aui-open")
     if (this._aui.anchor) this._aui.anchor.setAttribute("aria-expanded", "false")
     this._removeOpenListeners()
