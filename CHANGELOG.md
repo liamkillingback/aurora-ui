@@ -11,6 +11,22 @@ and the registered JavaScript hook names/DOM contract. Internal modules
 
 ## [Unreleased]
 
+## [0.1.3] — 2026-07-11
+
+### Fixed
+
+- **Choices controls survive a consumer input-reset (e.g. `@tailwindcss/forms`).**
+  That plugin paints bare `[type=checkbox]`/`[type=radio]` inputs, and its
+  `:checked:hover` / `:checked:focus` rules (specificity `0,3,0`) out-rank a
+  plain `.aui-*__input:checked` (`0,2,0`) — so on hover or after activation a
+  checked **switch** collapsed into a solid blue box, and radios filled in. The
+  kit now declares its control inputs' appearance across those interaction
+  states: the switch/segmented overlay inputs stay transparent, and the
+  checkbox/radio keep their token fill and drop the plugin's injected
+  tick/dot image and focus box-shadow. (Effective when the kit's CSS participates
+  in the normal cascade, i.e. imported unlayered or flattened; a strictly-layered
+  import alongside an unlayered reset still needs the consumer's own override.)
+
 ## [0.1.2] — 2026-07-11
 
 A second visual/interaction QA pass of the component lab. All are backward
@@ -114,7 +130,8 @@ Initial public release.
   support/compatibility policy, third-party notices, and architecture decision
   records.
 
-[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/liamkillingback/aurora-ui/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/liamkillingback/aurora-ui/releases/tag/v0.1.0

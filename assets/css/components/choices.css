@@ -38,7 +38,14 @@
 .aui-check__input:hover:not(:disabled) {
   border-color: rgb(var(--aui-action));
 }
+/* The :checked:hover / :checked:focus variants are enumerated so a consumer
+   input-reset that paints bare checkboxes (e.g. @tailwindcss/forms, whose
+   [type=checkbox]:checked:hover rule out-ranks a plain :checked) can't recolour
+   the box on hover/activation. `background` (shorthand) also clears any tick
+   image such a reset injects; the kit draws its own mark element. */
 .aui-check__input:checked,
+.aui-check__input:checked:hover,
+.aui-check__input:checked:focus,
 .aui-check__input[aria-checked="mixed"] {
   background: rgb(var(--aui-action));
   border-color: rgb(var(--aui-action));
@@ -171,7 +178,12 @@
 .aui-radio__input:hover:not(:disabled) {
   border-color: rgb(var(--aui-action));
 }
-.aui-radio__input:checked {
+/* :checked:hover / :checked:focus enumerated for the same reason as the
+   checkbox: keep a consumer input-reset from filling the radio on hover/focus.
+   The kit's radio stays an unpainted circle with a separate dot element. */
+.aui-radio__input:checked,
+.aui-radio__input:checked:hover,
+.aui-radio__input:checked:focus {
   border-color: rgb(var(--aui-action));
   background: rgb(var(--aui-surface));
 }
@@ -244,6 +256,21 @@
   margin: 0;
   cursor: inherit;
   z-index: 1;
+}
+/* The input is an invisible hit-area layered over the track. Declare it
+   transparent across the interaction states a consumer input-reset might paint
+   — notably @tailwindcss/forms, whose [type=checkbox]:checked:hover /
+   :checked:focus rules out-rank a plain :checked — so it never shows as a solid
+   box over the switch. */
+.aui-switch__input,
+.aui-switch__input:hover,
+.aui-switch__input:focus,
+.aui-switch__input:checked,
+.aui-switch__input:checked:hover,
+.aui-switch__input:checked:focus {
+  background: transparent;
+  border-width: 0;
+  box-shadow: none;
 }
 .aui-switch__track {
   position: relative;
@@ -355,6 +382,18 @@
   border-radius: var(--aui-radius-sm);
   cursor: inherit;
 }
+/* Invisible hit-area over the labels — same defensive transparency as the
+   switch input so a consumer input-reset can't paint the active segment. */
+.aui-segmented__input,
+.aui-segmented__input:hover,
+.aui-segmented__input:focus,
+.aui-segmented__input:checked,
+.aui-segmented__input:checked:hover,
+.aui-segmented__input:checked:focus {
+  background: transparent;
+  border-width: 0;
+  box-shadow: none;
+}
 .aui-segmented__label {
   position: relative;
   display: flex;
@@ -389,6 +428,15 @@
 .aui-segmented--lg .aui-segmented__label {
   padding-block: var(--aui-space-3);
   font-size: var(--aui-text-base);
+}
+
+/* A consumer input-reset (e.g. @tailwindcss/forms) may add a focus ring via
+   box-shadow on the check/radio boxes; the kit shows focus through the shared
+   .aui-focusable outline instead, so clear that shadow. (The switch/segmented
+   overlay inputs clear box-shadow in their own rules above.) */
+.aui-check__input:focus,
+.aui-radio__input:focus {
+  box-shadow: none;
 }
 
 /* ── Reduced motion ───────────────────────────────────────────────────────── */
